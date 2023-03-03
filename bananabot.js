@@ -4,7 +4,7 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const { token } = require('./config.json');
 
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
-
+//dookie balls
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'commands');
