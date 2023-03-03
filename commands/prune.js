@@ -4,7 +4,7 @@ module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('prune')
 		.setDescription('Prune up to 99 messages.')
-		.addIntegerOption(option => option.setName('amount').setDescription('Number of messages to prune').setRequired(true)),
+		.addIntegerOption(option => option.setName('amount').setDescription('Number of messages to prune')),
 	async execute(interaction) {
 		const amount = interaction.options.getInteger('amount');
 
@@ -16,6 +16,6 @@ module.exports = {
 			interaction.reply({ content: 'There was an error trying to prune messages in this channel!', ephemeral: true });
 		});
 
-		return interaction.reply({ content: `Successfully pruned \`${amount}\` messages.`, ephemeral: true });
+		return interaction.reply({ content: `Pruning \`${amount}\` messages.`, ephemeral: true });
 	},
 };
