@@ -37,13 +37,8 @@ module.exports = {
                         new ButtonBuilder()
                             .setLabel('Confirm')
                             .setCustomId('submitlspdform')
-                            .setStyle(ButtonStyle.Primary)
-                    )
-                    .addComponents(
-                        new ButtonBuilder()
-                            .setLabel('Cancel')
-                            .setCustomId('cancellspdform')
-                            .setStyle(ButtonStyle.Danger)
+                            .setStyle(ButtonStyle.Link)
+                            .setLink() 
                     )
                 
                 await interaction.followUp({embeds: [botpanelembed]});
