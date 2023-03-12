@@ -1,4 +1,4 @@
-const { Events, EmbedBuilder } = require('discord.js')
+const { Events, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js')
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -36,12 +36,11 @@ module.exports = {
                     .addComponents(
                         new ButtonBuilder()
                             .setLabel('Confirm')
-                            .setCustomId('submitlspdform')
                             .setStyle(ButtonStyle.Link)
-                            .setLink() 
+                            .setURL('https://bananaproject.tj/')
                     )
                 
-                await interaction.followUp({embeds: [botpanelembed]});
+                await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
             }
         }
     }
