@@ -11,14 +11,14 @@ module.exports = {
             .setDescription('Use the buttons below to complete tasks')
             .setFields(
                 { name: '\u200B', value: ' ' },
-                {name: '<:lspd:1079545918736564374> | LSPD Form', value: 'Clock in form for Los Santos Police Department'},
+                {name: '<:lspd:1079545918736564374>  |  __LSPD Form__', value: 'Clock in form for Los Santos Police Department'},
                 { name: '\u200B', value: ' ' },
-                {name: '<:safd:1079545723026145352> | SAFD Form', value: 'Clock in form for San Andreas Fire Department'},
+                {name: '<:safd:1079545723026145352>  |  __SAFD Form__', value: 'Clock in form for San Andreas Fire Department'},
                 { name: '\u200B', value: ' ' },
-                {name: '<:cco:1079546626634424321> | CCO Form', value: 'Clock in form for Certified Civilian Operations'}
+                {name: '<:cco:1079546626634424321>  |  __CCO Form__', value: 'Clock in form for Certified Civilian Operations'}
             )
             .setFooter({ text: 'Work In Progress'})
-            .setTimestamp(Date.now())
+            .setTimestamp()
             .setThumbnail('https://i.imgur.com/qm87jIy.png')
 
             const row = new ActionRowBuilder()

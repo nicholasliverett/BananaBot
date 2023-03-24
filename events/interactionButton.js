@@ -10,14 +10,14 @@ module.exports = {
                     .setTitle('LSPD Clockin Modal');
 
                 const lspdnameinput = new TextInputBuilder()
-                    .setCustomId('lspdnameinput')
-                    .setLabel("Name:")
+                    .setCustomId('lspdemailinput')
+                    .setLabel("Email:")
                     .setStyle(TextInputStyle.Short)
-                    .setValue('Jimmy M.')
+                    .setValue('gamingthingemail@gmail.com')
                     .setRequired(true);
 
                 const lspdrankinput = new TextInputBuilder()
-                    .setCustomId('lspdnrankinput')
+                    .setCustomId('lspdrankinput')
                     .setLabel("Rank:")
                     .setStyle(TextInputStyle.Short)
                     .setValue('Police Officer II')
