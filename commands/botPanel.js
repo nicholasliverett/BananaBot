@@ -15,7 +15,8 @@ module.exports = {
                 { name: '\u200B', value: ' ' },
                 {name: '<:safd:1079545723026145352>  |  __SAFD Form__', value: 'Clock in form for San Andreas Fire Department'},
                 { name: '\u200B', value: ' ' },
-                {name: '<:cco:1079546626634424321>  |  __CCO Form__', value: 'Clock in form for Certified Civilian Operations'}
+                {name: '<:cco:1079546626634424321>  |  __CCO Form__', value: 'Clock in form for Certified Civilian Operations'},
+                { name: '\u200B', value: ' ' }
             )
             .setFooter({ text: 'Work In Progress'})
             .setTimestamp()
