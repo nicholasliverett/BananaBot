@@ -72,7 +72,79 @@ module.exports = {
                         
                     )
                     .setFooter({ text: `Work In Progress`})
-                    .setTimestamp(Date.now())
+                    .setTimestamp()
+                    .setThumbnail(`https://i.imgur.com/qm87jIy.png`)
+                const buttonrow = new ActionRowBuilder()
+                    .addComponents(
+                        new ButtonBuilder()
+                            .setLabel(`Confirm`)
+                            .setStyle(ButtonStyle.Link)
+                            .setURL(lspdclockinurl)
+                    )
+                
+                await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
+            }
+            if (interaction.customId === `safdmodal`) {
+                const emailinput = interaction.fields.getTextInputValue(`safdemailinput`);
+                const clockininput = interaction.fields.getTextInputValue(`safdclockininput`);
+                const clockoutinput = interaction.fields.getTextInputValue(`safdclockoutinput`);
+                const notes = interaction.fields.getTextInputValue(`safdnotes`);
+                const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
+                const usernickname = interactionUser.nickname.replace(/\[.+?]/g, "");
+                const usertag = interactionUser.user.tag;
+                const usercallsigns = interactionUser.nickname.match(/(?<=\[)[^\][]*(?=])/g);
+                var dd = todate.getDate();
+                var mm = todate.getMonth()+1;
+                const yyyy = todate.getFullYear();
+                if(dd<10) {
+                    dd=`0`+dd;
+                } 
+                if(mm<10) {
+                    mm=`0`+mm;
+                } 
+                const today = yyyy+`-`+mm+`-`+dd;
+                var clockinstart = new Date("01/01/2007 " + clockininput + ":00");
+                var clockinstop = new Date("01/01/2007 " + clockoutinput + ":00");
+                var hourDiff = (clockinstop - clockinstart)/1000/60/60;
+                if (hourDiff < 0) {
+                    hourDiff = 24 + hourDiff;
+                }
+                var minDiff = (hourDiff % 1)*60
+                if (minDiff < 0 ) {
+                    minDiff = 1440 + minDiff;
+                }
+                
+                hourDiff = hourDiff - minDiff/60
+                var clockinDiff = hourDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":" + minDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":00"
+                var lspdclockinurl = (`https://docs.google.com/forms/d/e/1FAIpQLSd-G-oCDsHjdZX9l1DYoXl9GN5I7LJ2jTCuRg2KFG-lCxJ_PA/viewform?usp=pp_url` + 
+                `&emailAddress=${emailinput}` +
+                `&entry.924437591=${usernickname.trim().replaceAll(' ', '+')}` + 
+                `&entry.1740414105=${usercallsigns.filter(s => s.includes(`FD`))[0]}` + 
+                `&entry.1362587187=${today}` +
+                `&entry.522182144=${clockininput}` + 
+                `&entry.522100359=${clockoutinput}` + 
+                `&entry.2145413509=${clockinDiff}`+ 
+                `&entry.333732655=${notes.trim().replaceAll(' ', '+')}`)
+
+
+                const botpanelembed = new EmbedBuilder()
+                    .setColor(`#5865F2`)
+                    .setTitle(`SAFD Clockin Form`)
+                    .setDescription(`Use the buttons below to confirm the form and submit.`)
+                    .setFields(
+                        {name: `:e_mail:  |  __Email:__`, value: emailinput},
+                        {name: `:bust_in_silhouette:  |  __Name:__`, value: usernickname},
+                        {name: `:pager:  |  __Callsign:__`, value: usercallsigns.filter(s => s.includes(`FD`))[0]},
+                        {name: `:calendar:  |  __Date:__`, value: today},
+                        {name: `:clock1:  |  __Clock In:__`, value: clockininput},
+                        {name: `:clock2:  |  __Clock Out:__`, value: clockoutinput},
+                        {name: `:hourglass:  |  __Total Time:__`, value: clockinDiff},
+                        {name: `:police_car:  |  __Notes:__`, value: notes},
+                        
+                        
+                    )
+                    .setFooter({ text: `Work In Progress`})
+                    .setTimestamp()
                     .setThumbnail(`https://i.imgur.com/qm87jIy.png`)
                 const buttonrow = new ActionRowBuilder()
                     .addComponents(
