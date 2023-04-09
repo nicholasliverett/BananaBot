@@ -21,8 +21,13 @@ module.exports = {
             .setFooter({ text: 'Work In Progress'})
             .setTimestamp()
             .setThumbnail('https://i.imgur.com/qm87jIy.png')
-
-            const row = new ActionRowBuilder()
+        const lspdquickembed = new EmbedBuilder()
+            .setColor('#ebff2b')
+            .setTitle('LSPD Quick Clock-In Panel')
+            .setDescription('Use the buttons below to quickly clock in/out')
+            .setFooter({ text: 'Work In Progress'})
+            .setTimestamp()
+            const formrow = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
                         .setLabel('LSPD Form')
@@ -44,6 +49,22 @@ module.exports = {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji('1079546626634424321')
                 )
-		await interaction.reply({embeds: [botpanelembed], components: [row]});
+            const quickrow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('LSPD Q-Clockin')
+                        .setCustomId('lspdclockin')
+                        .setStyle(ButtonStyle.Primary)
+                        .setEmoji('1079545918736564374')
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('LSPD Q-Clockout')
+                        .setCustomId('lspdclockout')
+                        .setStyle(ButtonStyle.Primary)
+                        .setEmoji('1079545918736564374')
+                )
+		await interaction.reply({embeds: [botpanelembed], components: [formrow]});
+        await interaction.followUp({embeds: [lspdquickembed], components: [quickrow]});
 	},
 };

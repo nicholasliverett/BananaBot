@@ -1,4 +1,16 @@
-const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle } = require('discord.js');
+const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
+
+// create connection/mysql database
+const mysql = require('mysql');
+const db = mysql.createConnection({
+	host: 'localhost',
+	user: 'root',
+	password: 'Gamingpassword7',
+    database: 'masterhours'
+});
+db.connect(function(err) {
+    if (err) throw err;
+});
 
 module.exports = {
 	name: Events.InteractionCreate,
@@ -96,6 +108,89 @@ module.exports = {
                 await interaction.showModal(lspdmodal);
             } else if (interaction.customId === 'ccoform') {
                 await interaction.followUp('CCO')
+            } else if (interaction.customId === 'lspdclockin') {
+                const queryresult = () => {
+                    return new Promise((resolve, reject)=>{
+                        db.query("SELECT * FROM hours WHERE clockout IS NULL", (err, result) => {
+                        if (err) throw err;
+                        return resolve(result);
+                    });
+                });
+                };
+                const qresult = await queryresult();
+                if (await qresult[0] != undefined) {
+                    await interaction.reply('You must clock out before clocking in!');
+                    return;
+                };
+                const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
+                const usertag = interactionUser.user.tag;
+                var todate = new Date();
+                var dd = todate.getDate();
+                var MM = todate.getMonth()+1;
+                var hh = todate.getHours();
+                var mm = todate.getMinutes();
+                const yyyy = todate.getFullYear();
+                if(dd<10) {
+                    dd=`0`+dd;
+                } 
+                if(MM<10) {
+                    MM=`0`+MM;
+                } 
+                const today = yyyy+`-`+MM+`-`+dd;
+                if(mm<10) {
+                    mm=`0`+mm;
+                } 
+                if(hh<10) {
+                    hh=`0`+hh;
+                }
+                const clockin = hh+`:`+mm+`:00`;
+
+                
+                var sql = `INSERT INTO hours (discord_id, date, clockin) VALUES ('${usertag}', '${today}', '${clockin}')`;
+                db.query(sql, function (err, result) {
+                    if (err) throw err;
+                    console.log("1 record inserted");
+                });
+                const lspdqclockinembed = new EmbedBuilder()
+                    .setColor('#ebff2b')
+                    .setTitle('Received Clockin')
+                    .setDescription('Clockout whenever you go off duty.')
+                    .setFooter({ text: 'Work In Progress'})
+                    .setTimestamp()
+                await interaction.reply({embeds: [lspdqclockinembed]})
+            } else if (interaction.customId === 'lspdclockout') {
+                const lspdqmodal = new ModalBuilder()
+                    .setCustomId('lspdqmodal')
+                    .setTitle('LSPD Quick Clockin Modal');
+
+                const lspdemailinput = new TextInputBuilder()
+                    .setCustomId('lspdemailinput')
+                    .setLabel("Email:")
+                    .setStyle(TextInputStyle.Short)
+                    .setValue('gamingthingemail@gmail.com')
+                    .setRequired(true);
+
+                const lspdrankinput = new TextInputBuilder()
+                    .setCustomId('lspdrankinput')
+                    .setLabel("Rank:")
+                    .setStyle(TextInputStyle.Short)
+                    .setValue('Police Officer II')
+                    .setRequired(true);
+
+                const lspdpatroltypeinput = new TextInputBuilder()
+                    .setCustomId('lspdpatroltypeinput')
+                    .setLabel("Patrol Type:")
+                    .setStyle(TextInputStyle.Short)
+                    .setValue('Normal Patrol')
+                    .setRequired(true);
+
+                const firstActionRow = new ActionRowBuilder().addComponents(lspdemailinput);
+                const secondActionRow = new ActionRowBuilder().addComponents(lspdrankinput);
+                const thirdActionRow = new ActionRowBuilder().addComponents(lspdpatroltypeinput);
+
+                lspdqmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
+
+                await interaction.showModal(lspdqmodal);
             }
         }
     }
