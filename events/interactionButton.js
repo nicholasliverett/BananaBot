@@ -66,7 +66,7 @@ module.exports = {
 
                 await interaction.showModal(lspdmodal);
             } else if (interaction.customId === 'safdform') {
-                const lspdmodal = new ModalBuilder()
+                const safdmodal = new ModalBuilder()
                     .setCustomId('safdmodal')
                     .setTitle('SAFD Clockin Modal');
 
@@ -103,15 +103,16 @@ module.exports = {
                 const thirdActionRow = new ActionRowBuilder().addComponents(safdclockoutinput);
                 const fourthActionRow = new ActionRowBuilder().addComponents(safdpatroltypeinput);
 
-                lspdmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
+                safdmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
 
-                await interaction.showModal(lspdmodal);
+                await interaction.showModal(safdmodal);
             } else if (interaction.customId === 'ccoform') {
                 await interaction.followUp('CCO')
             } else if (interaction.customId === 'lspdclockin') {
+                await interaction.deferReply({ephemeral: true})
                 const queryresult = () => {
                     return new Promise((resolve, reject)=>{
-                        db.query("SELECT * FROM hours WHERE clockout IS NULL", (err, result) => {
+                        db.query("SELECT * FROM lspdhours WHERE clockout IS NULL", (err, result) => {
                         if (err) throw err;
                         return resolve(result);
                     });
@@ -119,7 +120,7 @@ module.exports = {
                 };
                 const qresult = await queryresult();
                 if (await qresult[0] != undefined) {
-                    await interaction.reply('You must clock out before clocking in!');
+                    await interaction.followUp('You must clock out before clocking in!');
                     return;
                 };
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
@@ -146,18 +147,16 @@ module.exports = {
                 const clockin = hh+`:`+mm+`:00`;
 
                 
-                var sql = `INSERT INTO hours (discord_id, date, clockin) VALUES ('${usertag}', '${today}', '${clockin}')`;
+                var sql = `INSERT INTO lspdhours (discord_id, date, clockin) VALUES ('${usertag}', '${today}', '${clockin}')`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
-                    console.log("1 record inserted");
                 });
                 const lspdqclockinembed = new EmbedBuilder()
                     .setColor('#ebff2b')
-                    .setTitle('Received Clockin')
-                    .setDescription('Clockout whenever you go off duty.')
+                    .setTitle('Received Clock in')
                     .setFooter({ text: 'Work In Progress'})
                     .setTimestamp()
-                await interaction.reply({embeds: [lspdqclockinembed]})
+                await interaction.followUp({embeds: [lspdqclockinembed]})
             } else if (interaction.customId === 'lspdclockout') {
                 const lspdqmodal = new ModalBuilder()
                     .setCustomId('lspdqmodal')
@@ -191,6 +190,80 @@ module.exports = {
                 lspdqmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
 
                 await interaction.showModal(lspdqmodal);
+            } else if (interaction.customId === 'safdclockin') {
+                await interaction.deferReply({ephemeral: true})
+                const queryresult = () => {
+                    return new Promise((resolve, reject)=>{
+                        db.query("SELECT * FROM safdhours WHERE clockout IS NULL", (err, result) => {
+                        if (err) throw err;
+                        return resolve(result);
+                    });
+                });
+                };
+                const qresult = await queryresult();
+                if (await qresult[0] != undefined) {
+                    await interaction.followUp('You must clock out before clocking in again!');
+                    return;
+                };
+                const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
+                const usertag = interactionUser.user.tag;
+                var todate = new Date();
+                var dd = todate.getDate();
+                var MM = todate.getMonth()+1;
+                var hh = todate.getHours();
+                var mm = todate.getMinutes();
+                const yyyy = todate.getFullYear();
+                if(dd<10) {
+                    dd=`0`+dd;
+                } 
+                if(MM<10) {
+                    MM=`0`+MM;
+                } 
+                const today = yyyy+`-`+MM+`-`+dd;
+                if(mm<10) {
+                    mm=`0`+mm;
+                } 
+                if(hh<10) {
+                    hh=`0`+hh;
+                }
+                const clockin = hh+`:`+mm+`:00`;
+
+                
+                var sql = `INSERT INTO safdhours (discord_id, date, clockin) VALUES ('${usertag}', '${today}', '${clockin}')`;
+                db.query(sql, function (err, result) {
+                    if (err) throw err;
+                });
+                const safdqclockinembed = new EmbedBuilder()
+                    .setColor('#ebff2b')
+                    .setTitle('Received Clock in')
+                    .setFooter({ text: 'Work In Progress'})
+                    .setTimestamp()
+                await interaction.followUp({embeds: [safdqclockinembed]})
+            } else if (interaction.customId === 'safdclockout') {
+                const safdqmodal = new ModalBuilder()
+                    .setCustomId('safdqmodal')
+                    .setTitle('SAFD Quick Clockin Modal');
+
+                const safdemailinput = new TextInputBuilder()
+                    .setCustomId('safdemailinput')
+                    .setLabel("Email:")
+                    .setStyle(TextInputStyle.Short)
+                    .setValue('gamingthingemail@gmail.com')
+                    .setRequired(true);
+
+                const safdnotesinput = new TextInputBuilder()
+                    .setCustomId('safdnotesinput')
+                    .setLabel("Notes:")
+                    .setStyle(TextInputStyle.Short)
+                    .setPlaceholder('Input Notes')
+                    .setRequired(false);
+
+                const firstActionRow = new ActionRowBuilder().addComponents(safdemailinput);
+                const secondActionRow = new ActionRowBuilder().addComponents(safdnotesinput);
+
+                safdqmodal.addComponents(firstActionRow, secondActionRow);
+
+                await interaction.showModal(safdqmodal);
             }
         }
     }

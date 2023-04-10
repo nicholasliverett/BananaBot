@@ -6,7 +6,7 @@ module.exports = {
 		.setDescription('Posts Bot Button Panel'),
 	async execute(interaction) {
         const botpanelembed = new EmbedBuilder()
-            .setColor('#ebff2b')
+            .setColor('#23272A')
             .setTitle('Banana Bot Panel')
             .setDescription('Use the buttons below to complete tasks')
             .setFields(
@@ -22,8 +22,14 @@ module.exports = {
             .setTimestamp()
             .setThumbnail('https://i.imgur.com/qm87jIy.png')
         const lspdquickembed = new EmbedBuilder()
-            .setColor('#ebff2b')
+            .setColor('#5865F2')
             .setTitle('LSPD Quick Clock-In Panel')
+            .setDescription('Use the buttons below to quickly clock in/out')
+            .setFooter({ text: 'Work In Progress'})
+            .setTimestamp()
+        const safdquickembed = new EmbedBuilder()
+            .setColor('#ED4245')
+            .setTitle('SAFD Quick Clock-In Panel')
             .setDescription('Use the buttons below to quickly clock in/out')
             .setFooter({ text: 'Work In Progress'})
             .setTimestamp()
@@ -49,7 +55,7 @@ module.exports = {
                         .setStyle(ButtonStyle.Secondary)
                         .setEmoji('1079546626634424321')
                 )
-            const quickrow = new ActionRowBuilder()
+            const lspdquickrow = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
                         .setLabel('LSPD Q-Clockin')
@@ -64,7 +70,23 @@ module.exports = {
                         .setStyle(ButtonStyle.Primary)
                         .setEmoji('1079545918736564374')
                 )
+            const safdquickrow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('SAFD Q-Clockin')
+                        .setCustomId('safdclockin')
+                        .setStyle(ButtonStyle.Danger)
+                        .setEmoji('1079545723026145352')
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('SAFD Q-Clockout')
+                        .setCustomId('safdclockout')
+                        .setStyle(ButtonStyle.Danger)
+                        .setEmoji('1079545723026145352')
+                )
 		await interaction.reply({embeds: [botpanelembed], components: [formrow]});
-        await interaction.followUp({embeds: [lspdquickembed], components: [quickrow]});
+        await interaction.followUp({embeds: [lspdquickembed], components: [lspdquickrow]});
+        await interaction.followUp({embeds: [safdquickembed], components: [safdquickrow]});
 	},
 };
