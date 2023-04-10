@@ -1,13 +1,12 @@
 const { Events, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`)
 
-var todate = new Date();
-
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
         if (interaction.isModalSubmit()) {
             await interaction.deferReply({ephemeral: true})
             if (interaction.customId == `lspdmodal`) {
+                var todate = new Date();
                 const emailinput = interaction.fields.getTextInputValue(`lspdemailinput`);
                 const rankinput = interaction.fields.getTextInputValue(`lspdrankinput`);
                 const clockininput = interaction.fields.getTextInputValue(`lspdclockininput`);
@@ -84,6 +83,7 @@ module.exports = {
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
             } else if (interaction.customId == `safdmodal`) {
+                var todate = new Date();
                 const emailinput = interaction.fields.getTextInputValue(`safdemailinput`);
                 const clockininput = interaction.fields.getTextInputValue(`safdclockininput`);
                 const clockoutinput = interaction.fields.getTextInputValue(`safdclockoutinput`);
@@ -156,7 +156,7 @@ module.exports = {
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
             } else if (interaction.customId == 'lspdqmodal') {
-                console.log('NO WORKING')
+                var todate = new Date();
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
@@ -269,7 +269,7 @@ module.exports = {
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
                 //db.end();
             } else if (interaction.customId == 'safdqmodal') {
-                console.log('WORKING MAYBE')
+                var todate = new Date();
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
