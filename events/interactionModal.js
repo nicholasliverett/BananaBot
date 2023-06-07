@@ -1,5 +1,16 @@
 const { Events, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`)
 
+const mysql = require('mysql');
+const db = mysql.createConnection({
+	host: 'localhost',
+	user: 'root',
+	password: 'Gamingpassword7',
+    database: 'masterhours'
+});
+db.connect(function(err) {
+    if (err) throw err;
+});
+
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
@@ -51,6 +62,10 @@ module.exports = {
                 `&entry.1799406772=${today}` +
                 `&entry.386319268=${patroltypeinput.replaceAll(' ', '+')}`)
 
+                var sql = `INSERT INTO safdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${usertag}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
+                db.query(sql, function (err, result) {
+                    if (err) throw err;
+                });
 
                 const botpanelembed = new EmbedBuilder()
                     .setColor(`#5865F2`)
@@ -91,6 +106,7 @@ module.exports = {
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
                 const usernickname = interactionUser.nickname.replace(/\[.+?]/g, "");
                 const usercallsigns = interactionUser.nickname.match(/(?<=\[)[^\][]*(?=])/g);
+                const usertag = interactionUser.user.tag;
                 var dd = todate.getDate();
                 var mm = todate.getMonth()+1;
                 const yyyy = todate.getFullYear();
@@ -113,7 +129,7 @@ module.exports = {
                 }
                 
                 hourDiff = hourDiff - minDiff/60
-                var clockinDiff = hourDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":" + minDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":00"
+                const clockinDiff = hourDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":" + minDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":00"
                 var safdclockinurl = (`https://docs.google.com/forms/d/e/1FAIpQLSd-G-oCDsHjdZX9l1DYoXl9GN5I7LJ2jTCuRg2KFG-lCxJ_PA/viewform?usp=pp_url` + 
                 `&emailAddress=${emailinput}` +
                 `&entry.924437591=${usernickname.trim().replaceAll(' ', '+')}` + 
@@ -126,6 +142,10 @@ module.exports = {
 
                 if (notes == '') notes = ' ';
 
+                var sql = `INSERT INTO safdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${usertag}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
+                db.query(sql, function (err, result) {
+                    if (err) throw err;
+                });
 
                 const botpanelembed = new EmbedBuilder()
                     .setColor(`#5865F2`)

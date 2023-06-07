@@ -14,8 +14,6 @@ module.exports = {
                 {name: '<:lspd:1079545918736564374>  |  __LSPD Form__', value: 'Clock in form for Los Santos Police Department'},
                 { name: '\u200B', value: ' ' },
                 {name: '<:safd:1079545723026145352>  |  __SAFD Form__', value: 'Clock in form for San Andreas Fire Department'},
-                { name: '\u200B', value: ' ' },
-                {name: '<:cco:1079546626634424321>  |  __CCO Form__', value: 'Clock in form for Certified Civilian Operations'},
                 { name: '\u200B', value: ' ' }
             )
             .setFooter({ text: 'Work In Progress'})
@@ -47,13 +45,6 @@ module.exports = {
                         .setCustomId('safdform')
                         .setStyle(ButtonStyle.Danger)
                         .setEmoji('1079545723026145352')
-                )
-                .addComponents(
-                    new ButtonBuilder()
-                        .setLabel('CCO Form')
-                        .setCustomId('ccoform')
-                        .setStyle(ButtonStyle.Secondary)
-                        .setEmoji('1079546626634424321')
                 )
             const lspdquickrow = new ActionRowBuilder()
                 .addComponents(
