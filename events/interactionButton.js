@@ -173,7 +173,7 @@ module.exports = {
                     .setCustomId('lspdrankinput')
                     .setLabel("Rank:")
                     .setStyle(TextInputStyle.Short)
-                    .setValue('Police Officer II')
+                    .setValue('Senior Police Officer')
                     .setRequired(true);
 
                 const lspdpatroltypeinput = new TextInputBuilder()
