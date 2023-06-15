@@ -150,8 +150,7 @@ module.exports = {
 
 		const botpanelembed = new EmbedBuilder()
 			.setColor(`#000000`)
-			.setTitle(`LSPD Hours`)
-			.setDescription(`Your hours for LSPD`)
+			.setTitle(`LSPD and SAFD Hours`)
 			.setFooter({ text: `Work In Progress`})
 			.setTimestamp()
 			.setImage('attachment://hourschart.png')
