@@ -12,7 +12,7 @@ module.exports = {
 		// create connection/mysql database
 		const mysql = require('mysql');
 		const db = mysql.createConnection({
-			host: 'localhost',
+			host: '192.168.1.44',
 			user: 'root',
 			password: 'Gamingpassword7',
 			database: 'masterhours'

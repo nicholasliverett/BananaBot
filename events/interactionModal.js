@@ -2,7 +2,7 @@ const { Events, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = r
 
 const mysql = require('mysql');
 const db = mysql.createConnection({
-	host: 'localhost',
+	host: '192.168.1.44',
 	user: 'root',
 	password: 'Gamingpassword7',
     database: 'masterhours'
@@ -180,7 +180,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: 'localhost',
+                    host: '192.168.1.44',
                     user: 'root',
                     password: 'Gamingpassword7',
                     database: 'masterhours'
@@ -293,7 +293,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: 'localhost',
+                    host: '192.168.1.44',
                     user: 'root',
                     password: 'Gamingpassword7',
                     database: 'masterhours'
