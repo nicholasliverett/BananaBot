@@ -13,7 +13,7 @@ module.exports = {
 		const mysql = require('mysql');
 		const db = mysql.createConnection({
 			host: '192.168.1.44',
-			user: 'root',
+			user: 'pi',
 			password: 'Gamingpassword7',
 			database: 'masterhours'
 		});
