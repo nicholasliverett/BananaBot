@@ -4,7 +4,7 @@ const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle
 const mysql = require('mysql');
 const db = mysql.createConnection({
 	host: '193.168.1.44',
-	user: 'root',
+	user: 'pi',
 	password: 'Gamingpassword7',
     database: 'masterhours'
 });
