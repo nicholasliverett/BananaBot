@@ -1,21 +1,19 @@
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
 
-// create connection/mysql database
-const mysql = require('mysql');
-const db = mysql.createConnection({
-	host: '193.168.1.44',
-	user: 'pi',
-	password: 'Gamingpassword7',
-    database: 'masterhours'
-});
-db.connect(function(err) {
-    if (err) throw err;
-});
-
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
         if (interaction.isButton()) {
+            const mysql = require('mysql');
+            const db = mysql.createConnection({
+                host: '193.168.1.44',
+                user: 'pi',
+                password: 'Gamingpassword7',
+                database: 'masterhours'
+            });
+            db.connect(function(err) {
+                if (err) throw err;
+            });
             if (interaction.customId === 'lspdform') {
                 const lspdmodal = new ModalBuilder()
                     .setCustomId('lspdmodal')
@@ -265,6 +263,7 @@ module.exports = {
 
                 await interaction.showModal(safdqmodal);
             }
+            db.end();
         }
     }
     

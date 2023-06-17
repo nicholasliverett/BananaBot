@@ -1,20 +1,19 @@
 const { Events, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require(`discord.js`)
 
-const mysql = require('mysql');
-const db = mysql.createConnection({
-	host: '192.168.1.44',
-	user: 'pi',
-	password: 'Gamingpassword7',
-    database: 'masterhours'
-});
-db.connect(function(err) {
-    if (err) throw err;
-});
-
 module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
         if (interaction.isModalSubmit()) {
+            const mysql = require('mysql');
+            const db = mysql.createConnection({
+                host: '192.168.1.44',
+                user: 'pi',
+                password: 'Gamingpassword7',
+                database: 'masterhours'
+            });
+            db.connect(function(err) {
+                if (err) throw err;
+            });
             await interaction.deferReply({ephemeral: true})
             if (interaction.customId == `lspdmodal`) {
                 var todate = new Date();
