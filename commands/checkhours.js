@@ -1,8 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder } = require('discord.js');
 const { ChartJSNodeCanvas, ChartCallback } = require('chartjs-node-canvas');
 const { config } = require('shelljs');
-require('chartjs-adapter-moment');
-
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -15,15 +13,18 @@ module.exports = {
 			host: '192.168.1.44',
 			user: 'pi',
 			password: 'Gamingpassword7',
-			database: 'masterhours'
+			database: 'masterhours',
+			connectTimeout: 60000
 		});
 		db.connect(function(err) {
 			if (err) throw err;
 		});
+		const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
+		const usertag = interactionUser.user.tag;
 
 		var lspdqueryresult = () => {
 			return new Promise((resolve, reject)=>{
-				db.query("SELECT date,total_time FROM lspdhours;", (err, result) => {
+				db.query(`SELECT date, total_time FROM lspdhours WHERE discord_id='${usertag}';`, (err, result) => {
 				if (err) throw err;
 				return resolve(result);
 			});
@@ -32,9 +33,10 @@ module.exports = {
 		var lspdqresult = await lspdqueryresult();
 		var safdqueryresult = () => {
 			return new Promise((resolve, reject)=>{
-				db.query("SELECT date,total_time FROM safdhours;", (err, result) => {
+				db.query(`SELECT date, total_time FROM safdhours WHERE discord_id='${usertag}';`, (err, result) => {
 				if (err) throw err;
 				return resolve(result);
+				
 			});
 		});
 		};
@@ -120,15 +122,18 @@ module.exports = {
 
 		const width = 400
 		const height = 200
+		const backgroundColor = '#2b2d31'
 
 		const canvas = new ChartJSNodeCanvas({
 			width, 
 			height, 
+			plugins: {
+				globalVariableLegacy: ['chartjs-adapter-date-fns']
+			},
 		});
 		
 		const configuration = {
 			type: 'scatter',
-			backgroundColor: '#2b2d31',
 			data: {
 				datasets: [{
 					label: 'LSPD Hours',
@@ -142,7 +147,7 @@ module.exports = {
 					borderColor: '#ed4245',
 				}]
 			},
-			options: {scales: {x: {type: 'time', time: {unit: 'day'}}, y: {min: 0}}, parsing: {xAxisKey: 'date', yAxisKey: 'total_time'}, plugins: {customCanvasBackgroundColor: {color: '#302c34'}}}
+			options: {scales: {x: {type: 'time', time: {unit: 'day'}}, y: {min: 0}}, parsing: {xAxisKey: 'date', yAxisKey: 'total_time'}}
 		}
 
 		const image = await canvas.renderToBuffer(configuration)
@@ -157,7 +162,6 @@ module.exports = {
 
 		await interaction.reply({embeds:[botpanelembed], files: [hourschart]})
 		db.end();
-		
 	},
 };
 

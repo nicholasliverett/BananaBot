@@ -4,18 +4,19 @@ module.exports = {
 	name: Events.InteractionCreate,
 	async execute(interaction) {
         if (interaction.isModalSubmit()) {
-            const mysql = require('mysql');
-            const db = mysql.createConnection({
-                host: '192.168.1.44',
-                user: 'pi',
-                password: 'Gamingpassword7',
-                database: 'masterhours'
-            });
-            db.connect(function(err) {
-                if (err) throw err;
-            });
             await interaction.deferReply({ephemeral: true})
             if (interaction.customId == `lspdmodal`) {
+                const mysql = require('mysql');
+                const db = mysql.createConnection({
+                    host: '192.168.1.44',
+                    user: 'pi',
+                    password: 'Gamingpassword7',
+                    database: 'masterhours',
+                    connectTimeout: 60000
+                });
+                db.connect(function(err) {
+                    if (err) throw err;
+                });
                 var todate = new Date();
                 const emailinput = interaction.fields.getTextInputValue(`lspdemailinput`);
                 const rankinput = interaction.fields.getTextInputValue(`lspdrankinput`);
@@ -61,9 +62,10 @@ module.exports = {
                 `&entry.1799406772=${today}` +
                 `&entry.386319268=${patroltypeinput.replaceAll(' ', '+')}`)
 
-                var sql = `INSERT INTO safdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${usertag}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
+                var sql = `INSERT INTO lspdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${interaction.user.id}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
+                    
                 });
 
                 const botpanelembed = new EmbedBuilder()
@@ -97,6 +99,17 @@ module.exports = {
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
             } else if (interaction.customId == `safdmodal`) {
+                const mysql = require('mysql');
+                const db = mysql.createConnection({
+                    host: '192.168.1.44',
+                    user: 'pi',
+                    password: 'Gamingpassword7',
+                    database: 'masterhours',
+                    connectTimeout: 60000
+                });
+                db.connect(function(err) {
+                    if (err) throw err;
+                });
                 var todate = new Date();
                 const emailinput = interaction.fields.getTextInputValue(`safdemailinput`);
                 const clockininput = interaction.fields.getTextInputValue(`safdclockininput`);
@@ -141,9 +154,10 @@ module.exports = {
 
                 if (notes == '') notes = ' ';
 
-                var sql = `INSERT INTO safdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${usertag}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
+                var sql = `INSERT INTO safdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${interaction.user.id}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
+                    
                 });
 
                 const botpanelembed = new EmbedBuilder()
@@ -182,7 +196,8 @@ module.exports = {
                     host: '192.168.1.44',
                     user: 'pi',
                     password: 'Gamingpassword7',
-                    database: 'masterhours'
+                    database: 'masterhours',
+                    connectTimeout: 60000
                 });
                 db.connect(function(err) {
                     if (err) throw err;
@@ -234,6 +249,7 @@ module.exports = {
                 const sql = `UPDATE lspdhours SET clockout='${clockout}', total_time='${totaltime}' WHERE clockout IS NULL`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
+                    
                 });
                 const emailinput = interaction.fields.getTextInputValue(`lspdemailinput`);
                 const rankinput = interaction.fields.getTextInputValue(`lspdrankinput`);
@@ -286,7 +302,6 @@ module.exports = {
                     )
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
-                //db.end();
             } else if (interaction.customId == 'safdqmodal') {
                 var todate = new Date();
                 // create connection/mysql database
@@ -295,7 +310,8 @@ module.exports = {
                     host: '192.168.1.44',
                     user: 'pi',
                     password: 'Gamingpassword7',
-                    database: 'masterhours'
+                    database: 'masterhours',
+                    connectTimeout: 60000
                 });
                 db.connect(function(err) {
                     if (err) throw err;
@@ -347,6 +363,7 @@ module.exports = {
                 const sql = `UPDATE safdhours SET clockout='${clockout}', total_time='${totaltime}' WHERE clockout IS NULL`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
+                    
                 });
                 const emailinput = interaction.fields.getTextInputValue(`safdemailinput`);
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
@@ -394,7 +411,6 @@ module.exports = {
                     )
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
-                db.end();
             }
         }
     }

@@ -11,11 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "chart.js": "^3.9.1",
-    "chartjs-adapter-moment": "^1.0.1",
+    "chartjs-adapter-date-fns": "^2.0.1",
     "chartjs-node-canvas": "^4.1.6",
     "concurrently": "^7.6.0",
+    "date-fns": "^2.30.0",
     "discord.js": "^14.9.0",
-    "moment": "^2.29.4",
     "mysql": "^2.18.1",
     "shelljs": "^0.8.5"
   }

@@ -6,10 +6,11 @@ module.exports = {
         if (interaction.isButton()) {
             const mysql = require('mysql');
             const db = mysql.createConnection({
-                host: '193.168.1.44',
+                host: '192.168.1.44',
                 user: 'pi',
                 password: 'Gamingpassword7',
-                database: 'masterhours'
+                database: 'masterhours',
+                connectTimeout: 60000
             });
             db.connect(function(err) {
                 if (err) throw err;
@@ -35,23 +36,24 @@ module.exports = {
 
                 const lspdclockininput = new TextInputBuilder()
                     .setCustomId('lspdclockininput')
-                    .setLabel("Clock In Time:")
+                    .setLabel("Clock In Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time')
+                    .setPlaceholder('Input in Military Time: 1:00')
                     .setRequired(true);
 
                 const lspdclockoutinput = new TextInputBuilder()
                     .setCustomId('lspdclockoutinput')
-                    .setLabel("Clock Out Time:")
+                    .setLabel("Clock Out Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time')
+                    .setPlaceholder('Input in Military Time: 17:59')
                     .setRequired(true);
 
                 const lspdpatroltypeinput = new TextInputBuilder()
                     .setCustomId('lspdpatroltypeinput')
-                    .setLabel("Patrol Type:")
+                    .setLabel("Patrol Type: ______ Patrol")
                     .setStyle(TextInputStyle.Short)
                     .setValue('Normal Patrol')
+                    .setPlaceholder('Normal, Ride-Along, Evaluation, Subdivision, Certification, Field Training, Administrative')
                     .setRequired(true);
 
                 const firstActionRow = new ActionRowBuilder().addComponents(lspdemailinput);
@@ -77,16 +79,16 @@ module.exports = {
 
                 const safdclockininput = new TextInputBuilder()
                     .setCustomId('safdclockininput')
-                    .setLabel("Clock In Time:")
+                    .setLabel("Clock In Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time')
+                    .setPlaceholder('Input in Military Time: 1:00')
                     .setRequired(true);
 
                 const safdclockoutinput = new TextInputBuilder()
                     .setCustomId('safdclockoutinput')
-                    .setLabel("Clock Out Time:")
+                    .setLabel("Clock Out Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time')
+                    .setPlaceholder('Input in Military Time: 17:59')
                     .setRequired(true);
 
                 const safdpatroltypeinput = new TextInputBuilder()
@@ -104,8 +106,6 @@ module.exports = {
                 safdmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
 
                 await interaction.showModal(safdmodal);
-            } else if (interaction.customId === 'ccoform') {
-                await interaction.followUp('CCO')
             } else if (interaction.customId === 'lspdclockin') {
                 await interaction.deferReply({ephemeral: true})
                 const queryresult = () => {
@@ -145,9 +145,10 @@ module.exports = {
                 const clockin = hh+`:`+mm+`:00`;
 
                 
-                var sql = `INSERT INTO lspdhours (discord_id, date, clockin) VALUES ('${usertag}', '${today}', '${clockin}')`;
+                var sql = `INSERT INTO lspdhours (discord_id, date, clockin) VALUES ('${interaction.user.id}', '${today}', '${clockin}')`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
+                    
                 });
                 const lspdqclockinembed = new EmbedBuilder()
                     .setColor('#ebff2b')
@@ -176,9 +177,10 @@ module.exports = {
 
                 const lspdpatroltypeinput = new TextInputBuilder()
                     .setCustomId('lspdpatroltypeinput')
-                    .setLabel("Patrol Type:")
+                    .setLabel("Patrol Type: ______ Patrol")
                     .setStyle(TextInputStyle.Short)
                     .setValue('Normal Patrol')
+                    .setPlaceholder('Normal, Ride-Along, Evaluation, Subdivision, Certification, Field Training, Administrative')
                     .setRequired(true);
 
                 const firstActionRow = new ActionRowBuilder().addComponents(lspdemailinput);
@@ -227,9 +229,10 @@ module.exports = {
                 const clockin = hh+`:`+mm+`:00`;
 
                 
-                var sql = `INSERT INTO safdhours (discord_id, date, clockin) VALUES ('${usertag}', '${today}', '${clockin}')`;
+                var sql = `INSERT INTO safdhours (discord_id, date, clockin) VALUES ('${interaction.user.id}', '${today}', '${clockin}')`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
+                    
                 });
                 const safdqclockinembed = new EmbedBuilder()
                     .setColor('#ebff2b')
@@ -263,7 +266,6 @@ module.exports = {
 
                 await interaction.showModal(safdqmodal);
             }
-            db.end();
         }
     }
     
