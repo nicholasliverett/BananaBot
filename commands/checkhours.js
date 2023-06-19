@@ -24,7 +24,7 @@ module.exports = {
 
 		var lspdqueryresult = () => {
 			return new Promise((resolve, reject)=>{
-				db.query(`SELECT date, total_time FROM lspdhours WHERE discord_id='${usertag}';`, (err, result) => {
+				db.query(`SELECT date, total_time FROM lspdhours WHERE discord_id='${interaction.user.id}';`, (err, result) => {
 				if (err) throw err;
 				return resolve(result);
 			});
@@ -33,7 +33,7 @@ module.exports = {
 		var lspdqresult = await lspdqueryresult();
 		var safdqueryresult = () => {
 			return new Promise((resolve, reject)=>{
-				db.query(`SELECT date, total_time FROM safdhours WHERE discord_id='${usertag}';`, (err, result) => {
+				db.query(`SELECT date, total_time FROM safdhours WHERE discord_id='${interaction.user.id}';`, (err, result) => {
 				if (err) throw err;
 				return resolve(result);
 				
