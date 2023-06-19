@@ -19,7 +19,7 @@ module.exports = {
         });
         const queryresult = () => {
             return new Promise((resolve, reject)=>{
-                db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SUM(total_time) DESC) AS rank_total FROM safdhours GROUP BY discord_id ORDER BY rank_total", (err, result) => {
+                db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SUM(total_time) DESC) AS rank_total FROM safdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
                 if (err) throw err;
                 return resolve(result);
             });
@@ -28,8 +28,7 @@ module.exports = {
         const qresult = await queryresult();
 		const botpanelembed = new EmbedBuilder()
             .setColor(`#ED4245`)
-            .setTitle(`SAFD Leaderboard`)
-            .setTimestamp()
+            .setTitle(`SAFD Leaderboard: <t:${Math.floor(Date.now()/1000)}:d> at <t:${Math.floor(Date.now()/1000)}:T>`)
         var userNames = ''
         var userHours = ''
         for (let i = 0; i < qresult.length; i++) {
@@ -56,7 +55,7 @@ module.exports = {
                     });
                     const queryresult = () => {
                         return new Promise((resolve, reject)=>{
-                            db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SUM(total_time) DESC) AS rank_total FROM safdhours GROUP BY discord_id ORDER BY rank_total", (err, result) => {
+                            db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SUM(total_time) DESC) AS rank_total FROM safdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
                             if (err) throw err;
                             return resolve(result);
                         });
@@ -65,8 +64,7 @@ module.exports = {
                     const qresult = await queryresult();
                     const botpanelembed = new EmbedBuilder()
                         .setColor(`#ED4245`)
-                        .setTitle(`SAFD Leaderboard`)
-                        .setTimestamp()
+                        .setTitle(`SAFD Leaderboard: <t:${Math.floor(Date.now()/1000)}:d> at <t:${Math.floor(Date.now()/1000)}:T>`)
                     var userNames = ''
                     var userHours = ''
                     for (let i = 0; i < qresult.length; i++) {
