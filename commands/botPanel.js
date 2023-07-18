@@ -8,12 +8,12 @@ module.exports = {
         const botpanelembed = new EmbedBuilder()
             .setColor('#23272A')
             .setTitle('Banana Bot Panel')
-            .setDescription('Use the buttons below to complete tasks')
+            .setDescription('Use the buttons below to clock hours for each respective department.')
             .setFields(
                 { name: '\u200B', value: ' '},
-                 {name: '<:lspd:1079545918736564374>  |  __LSPD Form__', value: 'Clock in form for Los Santos Police Department'},
+                 {name: '__Form Buttons__', value: 'Traditional clock in form. Input time you clocked in and clocked out and everything else will be done for you.'},
                 { name: '\u200B', value: ' '},
-                { name: '<:safd:1079545723026145352>  |  __SAFD Form__', value: 'Clock in form for San Andreas Fire Department'},
+                { name: '__Q-Clock Buttons__', value: 'Simply click clock in an clock out when you clock in and clock out and everything else will be done for you.'},
                 { name: '\u200B', value: ' '}
             )
             .setFooter({ text: 'Work In Progress'})
@@ -21,16 +21,10 @@ module.exports = {
             .setThumbnail('https://i.imgur.com/qm87jIy.png')
         const lspdquickembed = new EmbedBuilder()
             .setColor('#5865F2')
-            .setTitle('LSPD Quick Clock-In Panel')
-            .setDescription('Use the buttons below to quickly clock in/out')
-            .setFooter({ text: 'Work In Progress'})
-            .setTimestamp()
+            .setFields({name:'LSPD Q-Clock Panel', value: ' '})
         const safdquickembed = new EmbedBuilder()
             .setColor('#ED4245')
-            .setTitle('SAFD Quick Clock-In Panel')
-            .setDescription('Use the buttons below to quickly clock in/out')
-            .setFooter({ text: 'Work In Progress'})
-            .setTimestamp()
+            .setFields({name:'SAFD Q-Clock Panel', value: ' '})
             const formrow = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
