@@ -21,10 +21,10 @@ module.exports = {
             .setThumbnail('https://i.imgur.com/qm87jIy.png')
         const lspdquickembed = new EmbedBuilder()
             .setColor('#5865F2')
-            .setFields({name:'LSPD Q-Clock Panel', value: ' '})
+            .setTitle('LSPD Q-Clock Panel')
         const safdquickembed = new EmbedBuilder()
             .setColor('#ED4245')
-            .setFields({name:'SAFD Q-Clock Panel', value: ' '})
+            .setTitle('SAFD Q-Clock Panel')
             const formrow = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()

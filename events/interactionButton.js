@@ -1,3 +1,4 @@
+const { previousSaturday } = require('date-fns');
 const { ActionRowBuilder, Events, ModalBuilder, TextInputBuilder, TextInputStyle, EmbedBuilder } = require('discord.js');
 
 module.exports = {
@@ -67,6 +68,7 @@ module.exports = {
                 await interaction.showModal(lspdmodal);
             } else if (interaction.customId === 'safdform') {
                 const safdmodal = new ModalBuilder()
+                    .setColor('#ED4245')
                     .setCustomId('safdmodal')
                     .setTitle('SAFD Clockin Modal');
 
@@ -110,7 +112,7 @@ module.exports = {
                 await interaction.deferReply({ephemeral: true})
                 const queryresult = () => {
                     return new Promise((resolve, reject)=>{
-                        db.query("SELECT * FROM lspdhours WHERE clockout IS NULL", (err, result) => {
+                        db.query(`SELECT * FROM lspdhours WHERE clockout IS NULL AND discord_id='${interaction.user.id}';`, (err, result) => {
                         if (err) throw err;
                         return resolve(result);
                     });
@@ -122,7 +124,6 @@ module.exports = {
                     return;
                 };
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
-                const usertag = interactionUser.user.tag;
                 var todate = new Date();
                 var dd = todate.getDate();
                 var MM = todate.getMonth()+1;
@@ -143,8 +144,6 @@ module.exports = {
                     hh=`0`+hh;
                 }
                 const clockin = hh+`:`+mm+`:00`;
-
-                
                 var sql = `INSERT INTO lspdhours (discord_id, date, clockin) VALUES ('${interaction.user.id}', '${today}', '${clockin}')`;
                 db.query(sql, function (err, result) {
                     if (err) throw err;
@@ -194,13 +193,13 @@ module.exports = {
                 await interaction.deferReply({ephemeral: true})
                 const queryresult = () => {
                     return new Promise((resolve, reject)=>{
-                        db.query("SELECT * FROM safdhours WHERE clockout IS NULL", (err, result) => {
+                        db.query(`SELECT * FROM safdhours WHERE clockout IS NULL AND discord_id='${interaction.user.id}';`, (err, result) => {
                         if (err) throw err;
                         return resolve(result);
                     });
                 });
                 };
-                const qresult = await queryresult();
+                const qresult = await queryresult();;
                 if (await qresult[0] != undefined) {
                     await interaction.followUp('You must clock out before clocking in again!');
                     return;
@@ -234,13 +233,53 @@ module.exports = {
                     if (err) throw err;
                     
                 });
-                const safdqclockinembed = new EmbedBuilder()
-                    .setColor('#ebff2b')
-                    .setTitle('Received Clock in')
-                    .setFooter({ text: 'Work In Progress'})
-                    .setTimestamp()
-                await interaction.followUp({embeds: [safdqclockinembed]})
+                const previousembed = interaction.message.embeds[0];
+                if (previousembed.fields[0] == undefined) {
+                    const safdqclockinembed = EmbedBuilder.from(previousembed)
+                        .setFields(
+                            {name: 'Active Users', value: `<@${interaction.user.id}>\n`, inline: true},
+                            {name: 'Clock In', value: `<t:${Math.floor(Date.now()/1000)}:t>\n`, inline: true}
+                            )
+                    await interaction.message.edit({embeds: [safdqclockinembed]})
+                    return;    
+                } else {
+                    const safdqclockinembed = EmbedBuilder.from(previousembed)
+                        .setFields(
+                            {name: 'Active Users', value: previousembed.fields[0].value + `<@${interaction.user.id}>\n`, inline: true},
+                            {name: 'Clock In', value: previousembed.fields[1].value + `<t:${Math.floor(Date.now()/1000)}:t>\n`, inline: true}
+                            )
+                    await interaction.message.edit({embeds: [safdqclockinembed]})
+                    return;
+                }
             } else if (interaction.customId === 'safdclockout') {
+                const queryresult = () => {
+                    return new Promise((resolve, reject)=>{
+                        db.query(`SELECT * FROM safdhours WHERE clockout IS NULL AND discord_id='${interaction.user.id}';`, (err, result) => {
+                        if (err) throw err;
+                        return resolve(result);
+                    });
+                });
+                };
+                const qresult = await queryresult();;
+                // if (await qresult[0] == undefined) {
+                //     const noclockinembed = new EmbedBuilder()
+                //         .setTitle('You need to clock in in order to clock out.')
+                //         .setColor('#ED4245')
+                //     await interaction.reply({embeds: noclockinembed, ephemeral: true });
+                //     return;
+                // };
+                const previousembed = interaction.message.embeds[0];
+                // if (previousembed.fields[1] == undefined) {
+                //     const safdembed = EmbedBuilder()
+                //         .setColor('#ED4245')
+                //         .setTitle('SAFD Q-Clock Panel')
+                // }else {
+                //     const safdembed = EmbedBuilder.from(previousembed)
+                //         .setFields()
+                // }
+                previousembed.fields[0]
+                
+
                 const safdqmodal = new ModalBuilder()
                     .setCustomId('safdqmodal')
                     .setTitle('SAFD Quick Clockin Modal');
