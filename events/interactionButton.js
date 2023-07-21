@@ -109,7 +109,6 @@ module.exports = {
 
                 await interaction.showModal(safdmodal);
             } else if (interaction.customId === 'lspdclockin') {
-                await interaction.deferReply({ephemeral: true})
                 const queryresult = () => {
                     return new Promise((resolve, reject)=>{
                         db.query(`SELECT * FROM lspdhours WHERE clockout IS NULL AND discord_id='${interaction.user.id}';`, (err, result) => {
@@ -120,7 +119,10 @@ module.exports = {
                 };
                 const qresult = await queryresult();
                 if (await qresult[0] != undefined) {
-                    await interaction.followUp('You must clock out before clocking in!');
+                    const noclockinembed = new EmbedBuilder()
+                        .setTitle('You need to clock out in order to clock in.')
+                        .setColor('#5865F2')
+                    await interaction.reply({embeds: [noclockinembed], ephemeral: true });
                     return;
                 };
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
@@ -149,13 +151,41 @@ module.exports = {
                     if (err) throw err;
                     
                 });
-                const lspdqclockinembed = new EmbedBuilder()
-                    .setColor('#ebff2b')
-                    .setTitle('Received Clock in')
-                    .setFooter({ text: 'Work In Progress'})
-                    .setTimestamp()
-                await interaction.followUp({embeds: [lspdqclockinembed]})
+                const previousembed = interaction.message.embeds[0];
+                if (previousembed.fields[0] == undefined) {
+                    const lspdqclockinembed = EmbedBuilder.from(previousembed)
+                        .setFields(
+                            {name: 'Active Users', value: `<@${interaction.user.id}>\n`, inline: true},
+                            {name: 'Clock In', value: `<t:${Math.floor(Date.now()/1000)}:t>\n`, inline: true}
+                            )
+                    await interaction.update({embeds: [lspdqclockinembed]})
+                    return;    
+                } else {
+                    const lspdqclockinembed = EmbedBuilder.from(previousembed)
+                        .setFields(
+                            {name: 'Active Users', value: previousembed.fields[0].value + `<@${interaction.user.id}>\n`, inline: true},
+                            {name: 'Clock In', value: previousembed.fields[1].value + `<t:${Math.floor(Date.now()/1000)}:t>\n`, inline: true}
+                            )
+                    await interaction.update({embeds: [lspdqclockinembed]})
+                    return;
+                }
             } else if (interaction.customId === 'lspdclockout') {
+                const queryresult = () => {
+                    return new Promise((resolve, reject)=>{
+                        db.query(`SELECT * FROM lspdhours WHERE clockout IS NULL AND discord_id='${interaction.user.id}';`, (err, result) => {
+                        if (err) throw err;
+                        return resolve(result);
+                    });
+                });
+                };
+                const qresult = await queryresult();
+                if (await qresult[0] == undefined) {
+                    const noclockinembed = new EmbedBuilder()
+                        .setTitle('You need to clock in in order to clock out.')
+                        .setColor('#5865F2')
+                    await interaction.reply({embeds: [noclockinembed], ephemeral: true });
+                    return;
+                };
                 const lspdqmodal = new ModalBuilder()
                     .setCustomId('lspdqmodal')
                     .setTitle('LSPD Quick Clockin Modal');
@@ -190,7 +220,6 @@ module.exports = {
 
                 await interaction.showModal(lspdqmodal);
             } else if (interaction.customId === 'safdclockin') {
-                await interaction.deferReply({ephemeral: true})
                 const queryresult = () => {
                     return new Promise((resolve, reject)=>{
                         db.query(`SELECT * FROM safdhours WHERE clockout IS NULL AND discord_id='${interaction.user.id}';`, (err, result) => {
@@ -201,11 +230,13 @@ module.exports = {
                 };
                 const qresult = await queryresult();;
                 if (await qresult[0] != undefined) {
-                    await interaction.followUp('You must clock out before clocking in again!');
+                    const noclockinembed = new EmbedBuilder()
+                        .setTitle('You need to clock out in order to clock in.')
+                        .setColor('#ED4245')
+                    await interaction.reply({embeds: [noclockinembed], ephemeral: true });
                     return;
                 };
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
-                const usertag = interactionUser.user.tag;
                 var todate = new Date();
                 var dd = todate.getDate();
                 var MM = todate.getMonth()+1;
@@ -240,7 +271,7 @@ module.exports = {
                             {name: 'Active Users', value: `<@${interaction.user.id}>\n`, inline: true},
                             {name: 'Clock In', value: `<t:${Math.floor(Date.now()/1000)}:t>\n`, inline: true}
                             )
-                    await interaction.message.edit({embeds: [safdqclockinembed]})
+                    await interaction.update({embeds: [safdqclockinembed]})
                     return;    
                 } else {
                     const safdqclockinembed = EmbedBuilder.from(previousembed)
@@ -248,7 +279,7 @@ module.exports = {
                             {name: 'Active Users', value: previousembed.fields[0].value + `<@${interaction.user.id}>\n`, inline: true},
                             {name: 'Clock In', value: previousembed.fields[1].value + `<t:${Math.floor(Date.now()/1000)}:t>\n`, inline: true}
                             )
-                    await interaction.message.edit({embeds: [safdqclockinembed]})
+                    await interaction.update({embeds: [safdqclockinembed]})
                     return;
                 }
             } else if (interaction.customId === 'safdclockout') {
@@ -260,26 +291,14 @@ module.exports = {
                     });
                 });
                 };
-                const qresult = await queryresult();;
-                // if (await qresult[0] == undefined) {
-                //     const noclockinembed = new EmbedBuilder()
-                //         .setTitle('You need to clock in in order to clock out.')
-                //         .setColor('#ED4245')
-                //     await interaction.reply({embeds: noclockinembed, ephemeral: true });
-                //     return;
-                // };
-                const previousembed = interaction.message.embeds[0];
-                // if (previousembed.fields[1] == undefined) {
-                //     const safdembed = EmbedBuilder()
-                //         .setColor('#ED4245')
-                //         .setTitle('SAFD Q-Clock Panel')
-                // }else {
-                //     const safdembed = EmbedBuilder.from(previousembed)
-                //         .setFields()
-                // }
-                previousembed.fields[0]
-                
-
+                const qresult = await queryresult();
+                if (await qresult[0] == undefined) {
+                    const noclockinembed = new EmbedBuilder()
+                        .setTitle('You need to clock in in order to clock out.')
+                        .setColor('#ED4245')
+                    await interaction.followUp({embeds: [noclockinembed], ephemeral: true });
+                    return;
+                };
                 const safdqmodal = new ModalBuilder()
                     .setCustomId('safdqmodal')
                     .setTitle('SAFD Quick Clockin Modal');
@@ -304,6 +323,7 @@ module.exports = {
                 safdqmodal.addComponents(firstActionRow, secondActionRow);
 
                 await interaction.showModal(safdqmodal);
+
             }
         }
     }

@@ -302,6 +302,30 @@ module.exports = {
                     )
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
+                const previousembed = interaction.message.embeds[0];
+
+                const activeusers = previousembed.fields[0].value
+                const clockin = previousembed.fields[1].value
+
+                const intuserindex = activeusers.indexOf(interaction.user.id) - 2
+                const clockinindex = intuserindex-(5*intuserindex/22)
+
+                const endresultusers = activeusers.replace(activeusers.substr(intuserindex, 22), "")
+                const endresultclockin = clockin.replace(clockin.substr(clockinindex, 17), "")
+
+                if (endresultusers == "") {
+                    const safdclockoutembed = new EmbedBuilder()
+                        .setColor('#5865F2')
+                        .setTitle('LSPD Q-Clock Panel')
+                    await interaction.message.edit({embeds: [safdclockoutembed]})
+                } else {
+                    const safdclockoutembed = EmbedBuilder.from(previousembed)
+                    .setFields(
+                        {name: 'Active Users', value: endresultusers, inline: true},
+                        {name: 'Clock In', value: endresultclockin, inline: true}
+                    )
+                    await interaction.message.edit({embeds: [safdclockoutembed]})
+                }
             } else if (interaction.customId == 'safdqmodal') {
                 var todate = new Date();
                 // create connection/mysql database
@@ -411,6 +435,30 @@ module.exports = {
                     )
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
+                const previousembed = interaction.message.embeds[0];
+
+                const activeusers = previousembed.fields[0].value
+                const clockin = previousembed.fields[1].value
+
+                const intuserindex = activeusers.indexOf(interaction.user.id) - 2
+                const clockinindex = intuserindex-(5*intuserindex/22)
+
+                const endresultusers = activeusers.replace(activeusers.substr(intuserindex, 22), "")
+                const endresultclockin = clockin.replace(clockin.substr(clockinindex, 17), "")
+
+                if (endresultusers == "") {
+                    const safdclockoutembed = new EmbedBuilder()
+                        .setColor('#ED4245')
+                        .setTitle('SAFD Q-Clock Panel')
+                    await interaction.message.edit({embeds: [safdclockoutembed]})
+                } else {
+                    const safdclockoutembed = EmbedBuilder.from(previousembed)
+                    .setFields(
+                        {name: 'Active Users', value: endresultusers, inline: true},
+                        {name: 'Clock In', value: endresultclockin, inline: true}
+                    )
+                    await interaction.message.edit({embeds: [safdclockoutembed]})
+                }
             }
         }
     }
