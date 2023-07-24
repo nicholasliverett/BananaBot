@@ -37,3 +37,4 @@ for (const file of eventFiles) {
 }
 
 client.login(token);
+client.users.send('624733100064112683', 'Logged On');
