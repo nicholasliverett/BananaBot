@@ -122,7 +122,6 @@ module.exports = {
 
 		const width = 400
 		const height = 200
-		const backgroundColor = '#2b2d31'
 
 		const canvas = new ChartJSNodeCanvas({
 			width, 
@@ -150,17 +149,97 @@ module.exports = {
 			options: {scales: {x: {type: 'time', time: {unit: 'day'}}, y: {min: 0}}, parsing: {xAxisKey: 'date', yAxisKey: 'total_time'}}
 		}
 
+		// var dd = todate.getDate();
+		// var mm = todate.getMonth()+1;
+		// const yyyy = todate.getFullYear();
+		// if(dd<10) {
+		// 	dd=`0`+dd;
+		// } 
+		// if(mm<10) {
+		// 	mm=`0`+mm;
+		// } 
+		// const today = yyyy+`-`+mm+`-`+dd;
+
 		const image = await canvas.renderToBuffer(configuration)
 		const hourschart = new AttachmentBuilder(image, {name: 'hourschart.png'})
+
+		var lspdtotalhours = Math.floor(lspdqresult.map(item => item.total_time).reduce((prev, next) => prev + next));
+		var lspdtotalmins = Math.round((lspdqresult.map(item => item.total_time).reduce((prev, next) => prev + next) - lspdtotalhours) * 60)
+
+		var safdtotalhours = Math.floor(safdqresult.map(item => item.total_time).reduce((prev, next) => prev + next));
+		var safdtotalmins = Math.round((safdqresult.map(item => item.total_time).reduce((prev, next) => prev + next) - safdtotalhours) * 60)
+
+		var lspdtotal = lspdtotalhours + ':' + lspdtotalmins + ':00';
+		var safdtotal = safdtotalhours + ':' + safdtotalmins + ':00';
+
+		var d = new Date();
+
+		d.setDate(1);
+		d.setHours(1);
+
+		while (d.getDay() !== 5) {
+			d.setDate(d.getDate() + 1);
+		}
+		var d2 = new Date();
+		d2.setHours(1);
+		d2.setDate(d.getDate() + 14);
+		var d0 = new Date();
+		d0.setMonth(d0.getMonth() - 1);
+		d0.setDate(1);
+		d0.setHours(0);
+		while (d0.getDay() !== 5) {
+			d0.setDate(d0.getDate() + 1)
+		}
+		d0.setDate(d0.getDate() + 14)
+
+		var fridays = [d0,d,d2]
+
+		var temp = fridays.map(d => new Date() - new Date(d).getTime());
+		var idx = temp.indexOf(Math.min(...temp.filter(x => x >= 0)));
+
+		var lspdcycle = 0;
+		var safdcycle = 0;
+		try {
+			for (let i = 0; new Date(lspdqresult[i].date) <= fridays[idx]; i++) {
+				lspdcycle = lspdqresult.slice(i+1)
+			}
+
+			var lspdcyclehours = Math.floor(lspdcycle.map(item => item.total_time).reduce((prev, next) => prev + next));
+			if(lspdcyclehours<10) {
+				lspdcyclehours=`0`+lspdcyclehours;
+			}
+			var lspdcyclemins = Math.round((lspdqresult.map(item => item.total_time).reduce((prev, next) => prev + next) - lspdtotalhours) * 60)
+			var lspdcycletotal = lspdcyclehours + ':' + lspdcyclemins + ':00';
+		} catch (error) {
+			lspdcycletotal = '00:00:00'
+		}
+		try {
+			for (let i = 0; new Date(safdqresult[i].date) <= fridays[idx]; i++) {
+				safdcycle = safdqresult.slice(i+1)
+			}
+			var safdcyclehours = Math.floor(safdcycle.map(item => item.total_time).reduce((prev, next) => prev + next));
+			if(safdcyclehours<10) {
+				safdcyclehours=`0`+safdcyclehours;
+			}
+			var safdcyclemins = Math.round((safdqresult.map(item => item.total_time).reduce((prev, next) => prev + next) - safdtotalhours) * 60)
+			var safdcycletotal = safdcyclehours + ':' + safdcyclemins + ':00';
+		} catch (error) {
+			safdcycletotal = '00:00:00'
+		}
 
 		const botpanelembed = new EmbedBuilder()
 			.setColor(`#000000`)
 			.setTitle(`LSPD and SAFD Hours`)
 			.setFooter({ text: `Work In Progress`})
 			.setTimestamp()
+			.setFields(
+				{ name: '\u200B', value: ' '},
+				{ name: 'LSPD Hours', value: `Total: \`${lspdtotal}\`\nCycle: \`${lspdcycletotal}\``, inline: true},
+				{ name: 'SAFD Hours', value: `Total: \`${safdtotal}\`\nCycle: \`${safdcycletotal}\``, inline: true},
+			)
 			.setImage('attachment://hourschart.png')
 
-		await interaction.reply({embeds:[botpanelembed], files: [hourschart]})
+		await interaction.reply({embeds:[botpanelembed], files: [hourschart], ephemeral: true})
 		db.end();
 	},
 };
