@@ -208,7 +208,10 @@ module.exports = {
 			if(lspdcyclehours<10) {
 				lspdcyclehours=`0`+lspdcyclehours;
 			}
-			var lspdcyclemins = Math.round((lspdqresult.map(item => item.total_time).reduce((prev, next) => prev + next) - lspdtotalhours) * 60)
+			var lspdcyclemins = Math.round((lspdcycle.map(item => item.total_time).reduce((prev, next) => prev + next) - lspdcyclehours) * 60)
+			if(lspdcyclemins<10) {
+				lspdcyclemins=`0`+lspdcyclemins;
+			}
 			var lspdcycletotal = lspdcyclehours + ':' + lspdcyclemins + ':00';
 		} catch (error) {
 			lspdcycletotal = '00:00:00'
@@ -221,7 +224,10 @@ module.exports = {
 			if(safdcyclehours<10) {
 				safdcyclehours=`0`+safdcyclehours;
 			}
-			var safdcyclemins = Math.round((safdqresult.map(item => item.total_time).reduce((prev, next) => prev + next) - safdtotalhours) * 60)
+			var safdcyclemins = Math.round((safdcycle.map(item => item.total_time).reduce((prev, next) => prev + next) - safdcyclehours) * 60)
+			if(safdcyclemins<10) {
+				safdcyclemins=`0`+safdcyclemins;
+			}
 			var safdcycletotal = safdcyclehours + ':' + safdcyclemins + ':00';
 		} catch (error) {
 			safdcycletotal = '00:00:00'
