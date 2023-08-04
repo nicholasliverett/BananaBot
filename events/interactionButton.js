@@ -68,7 +68,6 @@ module.exports = {
                 await interaction.showModal(lspdmodal);
             } else if (interaction.customId === 'safdform') {
                 const safdmodal = new ModalBuilder()
-                    .setColor('#ED4245')
                     .setCustomId('safdmodal')
                     .setTitle('SAFD Clockin Modal');
 
