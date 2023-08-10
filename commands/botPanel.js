@@ -25,6 +25,12 @@ module.exports = {
         const safdquickembed = new EmbedBuilder()
             .setColor('#ED4245')
             .setTitle('SAFD Q-Clock Panel')
+        const bcsoquickembed = new EmbedBuilder()
+            .setColor('#5865F2')
+            .setTitle('BCSO Q-Clock Panel')
+        const acdquickembed = new EmbedBuilder()
+            .setColor('#4e5058')
+            .setTitle('ACD Q-Clock Panel')
             const formrow = new ActionRowBuilder()
                 .addComponents(
                     new ButtonBuilder()
@@ -39,6 +45,21 @@ module.exports = {
                         .setCustomId('safdform')
                         .setStyle(ButtonStyle.Danger)
                         .setEmoji('1079545723026145352')
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('BCSO Form')
+                        .setCustomId('bcsoform')
+                        .setStyle(ButtonStyle.Primary)
+                        .setEmoji('1138953699465642157')
+                        .setDisabled(true)
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('ACD Form')
+                        .setCustomId('acdform')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('1138953663784693880')
                 )
             const lspdquickrow = new ActionRowBuilder()
                 .addComponents(
@@ -70,8 +91,42 @@ module.exports = {
                         .setStyle(ButtonStyle.Danger)
                         .setEmoji('1079545723026145352')
                 )
+            const bcsoquickrow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('BCSO Q-Clockin')
+                        .setCustomId('bcsoclockin')
+                        .setStyle(ButtonStyle.Primary)
+                        .setEmoji('1138953699465642157')
+                        .setDisabled(true)
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('BCSO Q-Clockout')
+                        .setCustomId('bcsoclockout')
+                        .setStyle(ButtonStyle.Primary)
+                        .setEmoji('1138953699465642157')
+                        .setDisabled(true)
+                )
+            const acdquickrow = new ActionRowBuilder()
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('ACD Q-Clockin')
+                        .setCustomId('acdclockin')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('1138953663784693880')
+                )
+                .addComponents(
+                    new ButtonBuilder()
+                        .setLabel('ACD Q-Clockout')
+                        .setCustomId('acdclockout')
+                        .setStyle(ButtonStyle.Secondary)
+                        .setEmoji('1138953663784693880')
+                )
 		await interaction.reply({embeds: [botpanelembed], components: [formrow]});
         await interaction.followUp({embeds: [lspdquickembed], components: [lspdquickrow]});
         await interaction.followUp({embeds: [safdquickembed], components: [safdquickrow]});
+        await interaction.followUp({embeds: [bcsoquickembed], components: [bcsoquickrow]});
+        await interaction.followUp({embeds: [acdquickembed], components: [acdquickrow]});
 	},
 };
