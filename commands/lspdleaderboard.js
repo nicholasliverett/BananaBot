@@ -19,7 +19,7 @@ module.exports = {
         });
         const queryresult = () => {
             return new Promise((resolve, reject)=>{
-                db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM lspdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
+                db.query("SELECT discord_id, SEC_TO_TIME(ROUND(sum(TIME_TO_SEC(total_time)))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM lspdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
                 if (err) throw err;
                 return resolve(result);
             });
@@ -33,7 +33,7 @@ module.exports = {
         var userHours = ''
         for (let i = 0; i < qresult.length; i++) {
             userNames += `\`${i+1}\` <@${qresult[i].discord_id}>\n`
-            userHours += `\`${qresult[i].total_total_time.floor()}\`\n`
+            userHours += `\`${qresult[i].total_total_time}\`\n`
         };
         botpanelembed.setFields(
             {name: `Top 10`, value: userNames, inline: true},
@@ -55,7 +55,7 @@ module.exports = {
                     });
                     const queryresult = () => {
                         return new Promise((resolve, reject)=>{
-                            db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM lspdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
+                            db.query("SELECT discord_id, SEC_TO_TIME(ROUND(sum(TIME_TO_SEC(total_time)))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM lspdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
                             if (err) throw err;
                             return resolve(result);
                         });
@@ -69,7 +69,7 @@ module.exports = {
                     var userHours = ''
                     for (let i = 0; i < qresult.length; i++) {
                         userNames += `\`${i+1}\` <@${qresult[i].discord_id}>\n`
-                        userHours += `\`${qresult[i].total_total_time.floor()}\`\n`
+                        userHours += `\`${qresult[i].total_total_time}\`\n`
                     };
                     botpanelembed.setFields(
                         {name: `Top 10`, value: userNames, inline: true},

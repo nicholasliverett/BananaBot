@@ -19,7 +19,7 @@ module.exports = {
         });
         const queryresult = () => {
             return new Promise((resolve, reject)=>{
-                db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM acdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
+                db.query("SELECT discord_id, SEC_TO_TIME(ROUND(sum(TIME_TO_SEC(total_time)))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM acdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
                 if (err) throw err;
                 return resolve(result);
             });
@@ -55,7 +55,7 @@ module.exports = {
                     });
                     const queryresult = () => {
                         return new Promise((resolve, reject)=>{
-                            db.query("SELECT discord_id, SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM acdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
+                            db.query("SELECT discord_id, SEC_TO_TIME(ROUND(sum(TIME_TO_SEC(total_time)))) AS total_total_time, RANK() OVER (ORDER BY SEC_TO_TIME(sum(TIME_TO_SEC(total_time))) DESC) AS rank_total FROM acdhours GROUP BY discord_id ORDER BY rank_total limit 10", (err, result) => {
                             if (err) throw err;
                             return resolve(result);
                         });
