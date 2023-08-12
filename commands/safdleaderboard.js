@@ -33,7 +33,7 @@ module.exports = {
         var userHours = ''
         for (let i = 0; i < qresult.length; i++) {
             userNames += `\`${i+1}\` <@${qresult[i].discord_id}>\n`
-            userHours += `\`${qresult[i].total_total_time}\`\n`
+            userHours += `\`${qresult[i].total_total_time.floor()}\`\n`
         };
         botpanelembed.setFields(
             {name: `Top 10`, value: userNames, inline: true},
@@ -69,7 +69,7 @@ module.exports = {
                     var userHours = ''
                     for (let i = 0; i < qresult.length; i++) {
                         userNames += `\`${i+1}\` <@${qresult[i].discord_id}>\n`
-                        userHours += `\`${qresult[i].total_total_time}\`\n`
+                        userHours += `\`${qresult[i].total_total_time.floor()}\`\n`
                     };
                     botpanelembed.setFields(
                         {name: `Top 10`, value: userNames, inline: true},
