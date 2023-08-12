@@ -13,7 +13,7 @@ module.exports = {
                 { name: '\u200B', value: ' '},
                  {name: '__Form Buttons__', value: 'Traditional clock in form. Input time you clocked in and clocked out and everything else will be done for you.'},
                 { name: '\u200B', value: ' '},
-                { name: 'Q-__Clock Buttons__', value: 'Simply click clock in an clock out when you clock in and clock out and everything else will be done for you.'},
+                { name: 'Q-__Clock Buttons__', value: 'Simply click clock in when you clockin and clockout when you clock out and everything else will be done for you.'},
                 { name: '\u200B', value: ' '}
             )
             .setFooter({ text: 'Work In Progress'})

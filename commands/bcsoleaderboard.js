@@ -8,7 +8,7 @@ module.exports = {
         await message.deferReply();
         const mysql = require('mysql');
         const db = mysql.createConnection({
-            host: '192.168.1.44',
+            host: '192.168.1.46',
             user: 'pi',
             password: 'Gamingpassword7',
             database: 'masterhours',
@@ -44,7 +44,7 @@ module.exports = {
                 setInterval(async () => {
                     const mysql = require('mysql');
                     const db = mysql.createConnection({
-                        host: '192.168.1.44',
+                        host: '192.168.1.46',
                         user: 'pi',
                         password: 'Gamingpassword7',
                         database: 'masterhours',

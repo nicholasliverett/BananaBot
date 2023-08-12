@@ -7,7 +7,7 @@ module.exports = {
         if (interaction.isButton()) {
             const mysql = require('mysql');
             const db = mysql.createConnection({
-                host: '192.168.1.44',
+                host: '192.168.1.46',
                 user: 'pi',
                 password: 'Gamingpassword7',
                 database: 'masterhours',
@@ -39,7 +39,7 @@ module.exports = {
                     .setCustomId('lspdclockininput')
                     .setLabel("Clock In Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time: 1:00')
+                    .setPlaceholder('Input in Military Time: 01:00')
                     .setRequired(true);
 
                 const lspdclockoutinput = new TextInputBuilder()
@@ -82,7 +82,7 @@ module.exports = {
                     .setCustomId('safdclockininput')
                     .setLabel("Clock In Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time: 1:00')
+                    .setPlaceholder('Input in Military Time: 01:00')
                     .setRequired(true);
 
                 const safdclockoutinput = new TextInputBuilder()
@@ -130,7 +130,7 @@ module.exports = {
                     .setCustomId('bcsoclockininput')
                     .setLabel("Clock In Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time: 1:00')
+                    .setPlaceholder('Input in Military Time: 01:00')
                     .setRequired(true);
 
                 const bcsoclockoutinput = new TextInputBuilder()
@@ -160,14 +160,7 @@ module.exports = {
             } else if (interaction.customId === 'acdform') {
                 const acdmodal = new ModalBuilder()
                     .setCustomId('acdmodal')
-                    .setTitle('BCSO Clockin Modal');
-
-                const acdemailinput = new TextInputBuilder()
-                    .setCustomId('acdemailinput')
-                    .setLabel("Email:")
-                    .setStyle(TextInputStyle.Short)
-                    .setValue('gamingthingemail@gmail.com')
-                    .setRequired(true);
+                    .setTitle('ACD Clockin Modal');
 
                 const acdrankinput = new TextInputBuilder()
                     .setCustomId('acdrankinput')
@@ -180,7 +173,7 @@ module.exports = {
                     .setCustomId('acdclockininput')
                     .setLabel("Clock In Time: XX:XX")
                     .setStyle(TextInputStyle.Short)
-                    .setPlaceholder('Input in Military Time: 1:00')
+                    .setPlaceholder('Input in Military Time: 01:00')
                     .setRequired(true);
 
                 const acdclockoutinput = new TextInputBuilder()
@@ -192,18 +185,17 @@ module.exports = {
 
                 const acdpatroltypeinput = new TextInputBuilder()
                     .setCustomId('acdpatroltypeinput')
-                    .setLabel("Type of Patrol: ")
+                    .setLabel("Type of Patrol: Air-1, Training")
                     .setStyle(TextInputStyle.Short)
                     .setPlaceholder('Air-1, Marine-1, Training')
                     .setRequired(true);
 
-                const firstActionRow = new ActionRowBuilder().addComponents(acdemailinput);
-                const secondActionRow = new ActionRowBuilder().addComponents(acdrankinput);
-                const thirdActionRow = new ActionRowBuilder().addComponents(acdclockininput);
-                const fourthActionRow = new ActionRowBuilder().addComponents(acdclockoutinput);
-                const fifthActionRow = new ActionRowBuilder().addComponents(acdpatroltypeinput);
+                const firstActionRow = new ActionRowBuilder().addComponents(acdrankinput);
+                const secondActionRow = new ActionRowBuilder().addComponents(acdclockininput);
+                const thirdActionRow = new ActionRowBuilder().addComponents(acdclockoutinput);
+                const fourthActionRow = new ActionRowBuilder().addComponents(acdpatroltypeinput);
 
-                acdmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow, fifthActionRow);
+                acdmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow, fourthActionRow);
 
                 await interaction.showModal(acdmodal);
             } else if (interaction.customId === 'lspdclockin') {
@@ -611,13 +603,6 @@ module.exports = {
                     .setCustomId('acdqmodal')
                     .setTitle('ACD Quick Clockin Modal');
 
-                const acdemailinput = new TextInputBuilder()
-                    .setCustomId('acdemailinput')
-                    .setLabel("Email:")
-                    .setStyle(TextInputStyle.Short)
-                    .setValue('gamingthingemail@gmail.com')
-                    .setRequired(true);
-
                 const acdrankinput = new TextInputBuilder()
                     .setCustomId('acdrankinput')
                     .setLabel("Rank:")
@@ -627,17 +612,15 @@ module.exports = {
 
                 const acdpatroltypeinput = new TextInputBuilder()
                     .setCustomId('acdpatroltypeinput')
-                    .setLabel("Patrol Type: ______ Patrol")
+                    .setLabel("Patrol Type: Air-1, Training")
                     .setStyle(TextInputStyle.Short)
-                    .setValue('Normal Patrol')
-                    .setPlaceholder('Normal, Ride-Along, Evaluation, Subdivision, Certification, Field Training, Administrative')
+                    .setPlaceholder('Air-1, Marine-1, Training')
                     .setRequired(true);
 
-                const firstActionRow = new ActionRowBuilder().addComponents(acdemailinput);
-                const secondActionRow = new ActionRowBuilder().addComponents(acdrankinput);
-                const thirdActionRow = new ActionRowBuilder().addComponents(acdpatroltypeinput);
+                const firstActionRow = new ActionRowBuilder().addComponents(acdrankinput);
+                const secondActionRow = new ActionRowBuilder().addComponents(acdpatroltypeinput);
 
-                acdqmodal.addComponents(firstActionRow, secondActionRow, thirdActionRow);
+                acdqmodal.addComponents(firstActionRow, secondActionRow);
 
                 await interaction.showModal(acdqmodal);
             }

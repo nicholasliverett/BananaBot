@@ -8,7 +8,7 @@ module.exports = {
             if (interaction.customId == `lspdmodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -101,7 +101,7 @@ module.exports = {
             } else if (interaction.customId == `safdmodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -188,10 +188,10 @@ module.exports = {
                     )
                 
                 await interaction.followUp({embeds: [botpanelembed], components: [buttonrow]});
-            } else if (interaction.customId == `acdmodal`) {
+            } else if (interaction.customId == `bcsomodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -201,11 +201,11 @@ module.exports = {
                     if (err) throw err;
                 });
                 var todate = new Date();
-                const emailinput = interaction.fields.getTextInputValue(`acdemailinput`);
-                const rankinput = interaction.fields.getTextInputValue(`acdrankinput`);
-                const clockininput = interaction.fields.getTextInputValue(`acdclockininput`);
-                const clockoutinput = interaction.fields.getTextInputValue(`acdclockoutinput`);
-                const patroltypeinput = interaction.fields.getTextInputValue(`acdpatroltypeinput`);
+                const emailinput = interaction.fields.getTextInputValue(`bcsoemailinput`);
+                const rankinput = interaction.fields.getTextInputValue(`bcsorankinput`);
+                const clockininput = interaction.fields.getTextInputValue(`bcsoclockininput`);
+                const clockoutinput = interaction.fields.getTextInputValue(`bcsoclockoutinput`);
+                const patroltypeinput = interaction.fields.getTextInputValue(`bcsopatroltypeinput`);
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
                 const usernickname = interactionUser.nickname.replace(/\[.+?]/g, "");
                 const usertag = interactionUser.user.tag;
@@ -284,7 +284,7 @@ module.exports = {
             } else if (interaction.customId == `acdmodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -294,14 +294,12 @@ module.exports = {
                     if (err) throw err;
                 });
                 var todate = new Date();
-                const emailinput = interaction.fields.getTextInputValue(`acdemailinput`);
                 const rankinput = interaction.fields.getTextInputValue(`acdrankinput`);
                 const clockininput = interaction.fields.getTextInputValue(`acdclockininput`);
                 const clockoutinput = interaction.fields.getTextInputValue(`acdclockoutinput`);
                 const patroltypeinput = interaction.fields.getTextInputValue(`acdpatroltypeinput`);
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
                 const usernickname = interactionUser.nickname.replace(/\[.+?]/g, "");
-                const usertag = interactionUser.user.tag;
                 const usercallsigns = interactionUser.nickname.match(/(?<=\[)[^\][]*(?=])/g);
                 var dd = todate.getDate();
                 var mm = todate.getMonth()+1;
@@ -327,16 +325,18 @@ module.exports = {
                 hourDiff = hourDiff - minDiff/60
                 var clockinDiff = hourDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":" + minDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":00"
                 var acdclockinurl = (`https://docs.google.com/forms/d/e/1FAIpQLSeTGhMNre5Yire4LjygynRw6WnZf_0RGNyLwX4oDi1edJ6-_g/viewform?usp=pp_url` +
-                `&emailAddress=${emailinput}` +
-                `&entry.1503124298=${usernickname.trim().replaceAll(' ', '+')}` +
-                `&entry.1563281728=${usercallsigns.filter(s => !s.includes(`FD`))[0]}` +
-                `&entry.909843694=${usertag.replaceAll('#', '%23')}` +
-                `&entry.650105918=${rankinput.replaceAll(' ', '+')}` +
-                `&entry.22974012=${clockininput}` +
-                `&entry.289301560=${clockoutinput}` +
-                `&entry.1474572841=${clockinDiff}` +
-                `&entry.1799406772=${today}` +
-                `&entry.386319268=${patroltypeinput.replaceAll(' ', '+')}`)
+                `&entry.958230945=${usernickname.trim().replaceAll(' ', '+')}` +
+                `&entry.929722036=${usercallsigns.filter(s => !s.includes(`FD`))[0]}-A` +
+                `&entry.491052360=${rankinput.replaceAll(' ', '+')}` +
+                `&entry.2055839344=${clockininput}` +
+                `&entry.1386064165=${clockoutinput}` +
+                `&entry.731667031=${clockinDiff}` +
+                `&entry.1335802133=${today}` +
+                `&entry.1698055831=7`)
+
+                for (let i = 0; i < patroltypeinput.split(" ").length; i++) {
+                    acdclockinurl += `&entry.1000045792=${patroltypeinput.split(", ")[i]}`
+                }
 
                 var sql = `INSERT INTO acdhours (discord_id, date, clockin, clockout, total_time) VALUES ('${interaction.user.id}', '${today}', '${clockininput+`:00`}', '${clockoutinput+`:00`}', '${clockinDiff}')`;
                 db.query(sql, function (err, result) {
@@ -345,15 +345,13 @@ module.exports = {
                 });
 
                 const botpanelembed = new EmbedBuilder()
-                    .setColor(`#5865F2`)
-                    .setTitle(`BCSO Clockin Form`)
+                    .setColor(`#4e5058`)
+                    .setTitle(`ACD Clockin Form`)
                     .setDescription(`Use the buttons below to confirm the form and submit.`)
                     .setFields(
-                        {name: `:e_mail:  |  __Email:__`, value: emailinput},
                         {name: `:bust_in_silhouette:  |  __Name:__`, value: usernickname},
-                        {name: `:pager:  |  __Callsign:__`, value: usercallsigns.filter(s => !s.includes(`FD`))[0]},
+                        {name: `:pager:  |  __Callsign:__`, value: `${usercallsigns.filter(s => !s.includes(`FD`))[0]}-A`},
                         {name: `:beginner:  |  __Rank:__`, value: rankinput},
-                        {name: `:identification_card:  |  __Discord Username:__`, value: usertag},
                         {name: `:calendar:  |  __Date:__`, value: today},
                         {name: `:police_car:  |  __Patrol Type:__`, value: patroltypeinput},
                         {name: `:clock1:  |  __Clock In:__`, value: clockininput},
@@ -379,7 +377,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -517,7 +515,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -650,7 +648,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -788,7 +786,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.44',
+                    host: '192.168.1.46',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -846,37 +844,35 @@ module.exports = {
                     if (err) throw err;
                     
                 });
-                const emailinput = interaction.fields.getTextInputValue(`acdemailinput`);
+
                 const rankinput = interaction.fields.getTextInputValue(`acdrankinput`);
                 const patroltypeinput = interaction.fields.getTextInputValue(`acdpatroltypeinput`);
                 const interactionUser = await interaction.guild.members.fetch(interaction.user.id);
                 const usernickname = interactionUser.nickname.replace(/\[.+?]/g, "");
-                const usertag = interactionUser.user.tag;
                 const usercallsigns = interactionUser.nickname.match(/(?<=\[)[^\][]*(?=])/g);
                 var clockinDiff = hourDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":" + minDiff.toLocaleString(`en-US`, {minimumIntegerDigits: 2}) + ":00"
                 var acdclockinurl = (`https://docs.google.com/forms/d/e/1FAIpQLSeTGhMNre5Yire4LjygynRw6WnZf_0RGNyLwX4oDi1edJ6-_g/viewform?usp=pp_url` +
-                `&emailAddress=${emailinput}` +
-                `&entry.1503124298=${usernickname.trim().replaceAll(' ', '+')}` +
-                `&entry.1563281728=${usercallsigns.filter(s => !s.includes(`FD`))[0]}` +
-                `&entry.909843694=${usertag.replaceAll('#', '%23')}` +
-                `&entry.650105918=${rankinput.replaceAll(' ', '+')}` +
-                `&entry.22974012=${dbclockin[0].clockin}` +
-                `&entry.289301560=${clockout}` +
-                `&entry.1474572841=${totaltime}` +
-                `&entry.1799406772=${today}` +
-                `&entry.386319268=${patroltypeinput.replaceAll(' ', '+')}`)
+                `&entry.958230945=${usernickname.trim().replaceAll(' ', '+')}` +
+                `&entry.929722036=${usercallsigns.filter(s => !s.includes(`FD`))[0]}-A` +
+                `&entry.491052360=${rankinput.replaceAll(' ', '+')}` +
+                `&entry.2055839344=${dbclockin[0].clockin}` +
+                `&entry.1386064165=${clockout}` +
+                `&entry.731667031=${totaltime}` +
+                `&entry.1335802133=${today}` +
+                `&entry.1698055831=7`)
 
+                for (let i = 0; i < patroltypeinput.split(" ").length; i++) {
+                    acdclockinurl += `&entry.1000045792=${patroltypeinput.split(", ")[i]}`
+                }
 
                 const botpanelembed = new EmbedBuilder()
-                    .setColor(`#5865F2`)
-                    .setTitle(`LSPD Quick Clockin Form`)
+                    .setColor(`#4e5058`)
+                    .setTitle(`ACD Quick Clockin Form`)
                     .setDescription(`Use the buttons below to confirm the form and submit.`)
                     .setFields(
-                        {name: `:e_mail:  |  __Email:__`, value: emailinput},
                         {name: `:bust_in_silhouette:  |  __Name:__`, value: usernickname},
                         {name: `:pager:  |  __Callsign:__`, value: usercallsigns.filter(s => !s.includes(`FD`))[0]},
                         {name: `:beginner:  |  __Rank:__`, value: rankinput},
-                        {name: `:identification_card:  |  __Discord Username:__`, value: usertag},
                         {name: `:calendar:  |  __Date:__`, value: today},
                         {name: `:police_car:  |  __Patrol Type:__`, value: patroltypeinput},
                         {name: `:clock1:  |  __Clock In:__`, value: dbclockin[0].clockin},
