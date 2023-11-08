@@ -3,7 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRow
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('botpanel')
-		.setDescription('Posts Bot Button Panel'),
+		.setDescription('Sends Bot Button Panel'),
 	async execute(interaction) {
         const botpanelembed = new EmbedBuilder()
             .setColor('#23272A')
