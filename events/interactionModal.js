@@ -8,7 +8,7 @@ module.exports = {
             if (interaction.customId == `lspdmodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -101,7 +101,7 @@ module.exports = {
             } else if (interaction.customId == `safdmodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -191,7 +191,7 @@ module.exports = {
             } else if (interaction.customId == `bcsomodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -284,7 +284,7 @@ module.exports = {
             } else if (interaction.customId == `acdmodal`) {
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -377,7 +377,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -515,7 +515,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -648,7 +648,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',
@@ -786,7 +786,7 @@ module.exports = {
                 // create connection/mysql database
                 const mysql = require('mysql');
                 const db = mysql.createConnection({
-                    host: '192.168.1.46',
+                    host: '192.168.1.5',
                     user: 'pi',
                     password: 'Gamingpassword7',
                     database: 'masterhours',

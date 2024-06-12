@@ -5,7 +5,7 @@ const { Client, Collection, Events, GatewayIntentBits } = require('discord.js');
 const token = process.env.TOKEN;
 require('chartjs-adapter-date-fns');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
 
 client.commands = new Collection();
 

@@ -7,7 +7,7 @@ module.exports = {
         if (interaction.isButton()) {
             const mysql = require('mysql');
             const db = mysql.createConnection({
-                host: '192.168.1.46',
+                host: '192.168.1.5',
                 user: 'pi',
                 password: 'Gamingpassword7',
                 database: 'masterhours',
