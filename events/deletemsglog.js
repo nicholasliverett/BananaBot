@@ -37,7 +37,7 @@ module.exports = {
         const embed = new EmbedBuilder()
         .setColor("Red")
         .setTitle(`⚠️ Deleted Message`)
-        .setDescription(`Message deleted at ${deleteTime}`)
+        .setDescription(`Message deleted ${deleteTime}`)
         .addFields({ name: "Message Content", value: `> ${message.content || "No message content"}`})
         .addFields({ name: "Message Author", value: `> \`${member.username}\` (${member.id})`})
         .addFields({ name: "Message Channel", value: `> ${message.channel} (${message.channel.id})`})
