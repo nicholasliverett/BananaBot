@@ -36,6 +36,9 @@ for (const file of eventFiles) {
 	}
 }
 
+client.on('error', error => {
+	console.error('WebSocket encountered an error: ', error);
+});
+
 client.login(token);
-client.on('error', console.error);
 client.users.send('624733100064112683', 'Logged On');
