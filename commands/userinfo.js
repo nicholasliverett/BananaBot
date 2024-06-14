@@ -8,12 +8,13 @@ module.exports = {
     async execute (interaction) {
 
         const user = interaction.targetUser
-        const member = await interaction.guild.members.fetch(interaction.targetId);
+        const member = interaction.targetMember
         const icon = user.displayAvatarURL();
+        const accentColor = user.hexAccentColor || 'Blurple';
         const tag = user.tag;
 
         const embed = new EmbedBuilder()
-        .setColor("Blurple")
+        .setColor(`${accentColor}`)
         .setAuthor({ name: tag, iconURL: icon })
         .setThumbnail(icon)
         .setFields(

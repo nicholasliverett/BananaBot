@@ -6,7 +6,7 @@ module.exports = {
 		.setName('globalsync')
 		.setDescription('CAREFUL: Syncs all commands globally!'),
 	async execute(interaction) {
-        await interaction.deferReply({ephemeral: true})
+        await interaction.deferReply({ephemeral: true});
 		var result = shell.exec('node ./delete-commands.js');
 		//console.log(result);
         result = shell.exec('node ./deploy-commands-globally.js');
