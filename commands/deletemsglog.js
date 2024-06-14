@@ -1,13 +1,14 @@
-const { SlashCommandBuilder, ChannelType, EmbedBuilder } = require('discord.js');
+const { SlashCommandBuilder, ChannelType, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const mysql = require('mysql');
 
 module.exports = {
-	mod: true,
 	data: new SlashCommandBuilder()
 		.setName('delete-message-log')
 		.setDescription('Logs Deleted Messages in Channel')
 		.addSubcommand(command => command.setName('setup').setDescription('Setup the deleted message log system').addChannelOption(option => option.setName('channel').setDescription('Log Channel').addChannelTypes(ChannelType.GuildText).setRequired(true)))
-		.addSubcommand(command => command.setName('disable').setDescription('Disable deleted message log system')),
+		.addSubcommand(command => command.setName('disable').setDescription('Disable deleted message log system'))
+		.setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+		.setDMPermission(false),
 	async execute(interaction) {
 
 		const db = mysql.createConnection({

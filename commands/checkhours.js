@@ -5,6 +5,7 @@ const { config } = require('shelljs');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('checkhours')
+		.setDMPermission(false)
 		.setDescription('Gets hours in scatterplot form'),
 	async execute(interaction) {
 		// create connection/mysql database

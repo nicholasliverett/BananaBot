@@ -3,6 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder, ButtonBuilder, ButtonStyle, ActionRow
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('botpanel')
+        .setDMPermission(false)
 		.setDescription('Sends Bot Button Panel'),
 	async execute(interaction) {
         const botpanelembed = new EmbedBuilder()

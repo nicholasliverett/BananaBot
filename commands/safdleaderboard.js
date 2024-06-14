@@ -3,6 +3,7 @@ const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 module.exports = {
 	data: new SlashCommandBuilder()
 		.setName('safdleaderboard')
+        .setDMPermission(false)
 		.setDescription('Replies with auto-updating SAFD leaderboard'),
 	async execute(message) {
         await message.deferReply();
