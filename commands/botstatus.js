@@ -6,6 +6,15 @@ module.exports ={
     .setDescription('Gives bot status'),
     async execute (interaction) {
 
+        const activitytypes = new Map([
+            [0, 'Playing '],
+            [1, 'Streaming '],
+            [2, 'Listening to '],
+            [3, 'Watching '],
+            [4, ''],
+            [5, 'Competing in ']
+        ])
+
         const name = `${interaction.client.user.username}`;
         const icon = `${interaction.client.user.avatarURL()}`;
         let servercount = await interaction.client.guilds.cache.reduce((a, b) => a+b.memberCount, 0);
@@ -26,9 +35,13 @@ module.exports ={
 
         const ping = `${reply.createdTimestamp - interaction.createdTimestamp} ms`;
 
+        const activitytype = interaction.client.user.presence.activities[0].type;
+        const activity = interaction.client.user.presence.activities[0].state;
+
         const embed = new EmbedBuilder()
             .setColor('Yellow')
             .setAuthor({ name: name, iconURL: icon })
+            .setDescription(`Status: ${activitytypes?.get(activitytype) + activity}`)
             .setThumbnail(`${icon}`)
             .setFooter({ text: `Bot ID: ${interaction.client.user.id}` })
             .setTimestamp()

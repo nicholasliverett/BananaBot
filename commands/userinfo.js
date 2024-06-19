@@ -1,4 +1,4 @@
-const { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField} = require('discord.js');
+const { ContextMenuCommandBuilder, EmbedBuilder, ApplicationCommandType, ActionRowBuilder, StringSelectMenuBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = {
     data: new ContextMenuCommandBuilder()
@@ -7,15 +7,34 @@ module.exports = {
     .setDMPermission(false),
     async execute (interaction) {
 
-        const user = interaction.targetUser
-        const member = interaction.targetMember
+        const activitytypes = new Map([
+            [0, 'Playing '],
+            [1, 'Streaming '],
+            [2, 'Listening to '],
+            [3, 'Watching '],
+            [4, ''],
+            [5, 'Competing in ']
+        ])
+
+        const user = interaction.targetUser;
+        const member = interaction.targetMember;
         const icon = user.displayAvatarURL();
         const accentColor = user.hexAccentColor || 'Blurple';
         const tag = user.tag;
+        let activity = member.presence?.activities[0].name;
+        if (activity == 'Custom Status') {
+            activity = member.presence?.activities[0].state
+        };
+        let activitytype = member.presence?.activities[0].type;
+        if (user.id == interaction.client.user.id) {
+            activity = user.presence?.activities[0].name;
+            activitytype = user.presence?.activities[0].type;
+        };
 
         const embed = new EmbedBuilder()
         .setColor(`${accentColor}`)
         .setAuthor({ name: tag, iconURL: icon })
+        .setDescription(`Status: ${activitytypes?.get(activitytype) + activity}`)
         .setThumbnail(icon)
         .setFields(
             { name: 'Member', value: `${user}`, inline: false },

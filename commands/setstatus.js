@@ -11,9 +11,18 @@ module.exports = {
             { name: 'Listening', value: `${2}` }, 
             { name: 'Competing', value: `${5}` }, 
             { name: 'Streaming', value: `${1}`},
-            { name: 'None', value: `${4}` }
+            { name: 'Custom', value: `${4}` }
         ).setRequired(true)),
 	async execute(interaction) {
+
+        const activitytypes = new Map([
+            [0, 'Playing '],
+            [1, 'Streaming '],
+            [2, 'Listening to '],
+            [3, 'Watching '],
+            [4, ''],
+            [5, 'Competing in ']
+        ])
 
         const { options } = interaction;
 		const status = options.getString('status');
@@ -23,13 +32,13 @@ module.exports = {
             return await interaction.reply({ content: 'You do not have access to this command.', emphemeral: true});
 
         interaction.client.user.setPresence({
-			activities: [{ name: status, type: type }],
+			activities: [{ name: status, type: type, state: status }],
             status: 'online'
 		});
 
         const embed = new EmbedBuilder()
         .setColor('Yellow')
-        .setDescription(`The bot now has the status \`${status}\`, with type \`${type}\``)
+        .setDescription(`The bot now has the status \`${activitytypes.get(type)  + status}\``)
 
         await interaction.reply({ embeds: [embed], ephemeral: true })
 	},

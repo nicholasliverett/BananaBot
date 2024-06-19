@@ -5,7 +5,7 @@ const { Client, Collection, Events, GatewayIntentBits, ActivityType, PresenceUpd
 const token = process.env.TOKEN;
 require('chartjs-adapter-date-fns');
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildPresences] });
 
 client.commands = new Collection();
 
