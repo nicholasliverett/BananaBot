@@ -21,20 +21,20 @@ module.exports = {
         const icon = user.displayAvatarURL();
         const accentColor = user.hexAccentColor || 'Blurple';
         const tag = user.tag;
-        let activity = member.presence?.activities[0].name;
-        if (activity == 'Custom Status') {
-            activity = member.presence?.activities[0].state
-        };
-        let activitytype = member.presence?.activities[0].type;
-        if (user.id == interaction.client.user.id) {
-            activity = user.presence?.activities[0].name;
-            activitytype = user.presence?.activities[0].type;
-        };
+        // let activity = member.presence?.activities[0].name;
+        // if (activity == 'Custom Status') {
+        //     activity = member.presence?.activities[0].state
+        // };
+        // let activitytype = member.presence?.activities[0].type;
+        // if (user.id == interaction.client.user.id) {
+        //     activity = user.presence?.activities[0].name;
+        //     activitytype = user.presence?.activities[0].type;
+        // };
 
         const embed = new EmbedBuilder()
         .setColor(`${accentColor}`)
         .setAuthor({ name: tag, iconURL: icon })
-        .setDescription(`Status: ${activitytypes?.get(activitytype) + activity}`)
+        // .setDescription(`Status: ${activitytypes?.get(activitytype) + activity}`)
         .setThumbnail(icon)
         .setFields(
             { name: 'Member', value: `${user}`, inline: false },
